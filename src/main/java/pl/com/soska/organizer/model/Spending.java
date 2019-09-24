@@ -2,6 +2,7 @@ package pl.com.soska.organizer.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pl.com.soska.organizer.enums.ForWhatEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class Spending {
 
     private BigDecimal amount;
 
-    private ForWhat forWhat;
+    private ForWhatEnum forWhat;
 
     private LocalDate date;
 
@@ -37,11 +38,11 @@ public class Spending {
         this.amount = amount;
     }
 
-    public ForWhat getForWhat() {
+    public ForWhatEnum getForWhat() {
         return forWhat;
     }
 
-    public void setForWhat(ForWhat forWhat) {
+    public void setForWhat(ForWhatEnum forWhat) {
         this.forWhat = forWhat;
     }
 

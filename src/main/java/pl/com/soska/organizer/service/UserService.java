@@ -6,7 +6,7 @@ import pl.com.soska.organizer.exception.UserNotFoundException;
 import pl.com.soska.organizer.model.User;
 import pl.com.soska.organizer.repository.UserRepository;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {

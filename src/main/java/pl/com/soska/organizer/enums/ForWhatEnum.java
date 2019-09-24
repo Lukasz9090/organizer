@@ -1,6 +1,6 @@
-package pl.com.soska.organizer.model;
+package pl.com.soska.organizer.enums;
 
-public enum ForWhat {
+public enum ForWhatEnum {
     FOOD,
     CLOTHES,
     COSMETICS,
