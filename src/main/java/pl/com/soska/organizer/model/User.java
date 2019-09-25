@@ -18,6 +18,7 @@ public class User {
     @Size(min = 6)
     private String password;
 
+    @DBRef
     private Set<Role> role;
 
     public User() {

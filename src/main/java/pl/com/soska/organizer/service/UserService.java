@@ -37,8 +37,9 @@ public class UserService {
         if (usernameExist.isPresent()) {
             throw new UserExistException("User with email: " + user.getEmail() + " already exist");
         }
+
         Role userRole = roleRepository.findByRole(RoleEnum.ROLE_USER);
-        user.setRole(userRole);
+        user.setRole(Set.of(userRole));
         String passwordHash = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordHash);
         userRepository.save(user);
