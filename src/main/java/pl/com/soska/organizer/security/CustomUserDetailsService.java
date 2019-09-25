@@ -29,13 +29,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User not exist!"));
 
-        org.springframework.security.core.userdetails.User userDetails =
-                new org.springframework.security.core.userdetails.User(
-                        user.getEmail(),
-                        user.getPassword(),
-                        convertAuthorities(user.getRole())
-                );
-        return userDetails;
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                convertAuthorities(user.getRole())
+        );
     }
 
     private Set<GrantedAuthority> convertAuthorities(Set <Role> userRoles){
