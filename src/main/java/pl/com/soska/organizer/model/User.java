@@ -18,7 +18,7 @@ public class User {
     @Size(min = 6)
     private String password;
 
-    private Role role;
+    private Set<Role> role;
 
     public User() {
     }
@@ -47,11 +47,11 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 }

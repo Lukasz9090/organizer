@@ -1,7 +1,7 @@
 package pl.com.soska.organizer.enums;
 
 public enum RoleEnum {
-    USER("User");
+    ROLE_USER("ROLE_USER");
 
     String description;
 
