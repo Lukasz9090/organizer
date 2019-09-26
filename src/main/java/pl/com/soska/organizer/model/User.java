@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +25,7 @@ public class User {
     @DBRef
     private Set<Role> role;
 
-    @DBRef
-    private List<Spending> spending;
+    private List<Spending> spending = new ArrayList<>();
 
     public User() {
     }

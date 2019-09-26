@@ -1,28 +1,19 @@
 package pl.com.soska.organizer.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import pl.com.soska.organizer.enums.ForWhatEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class Spending {
-    private int id;
+
     private BigDecimal amount;
     private ForWhatEnum forWhat;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
 
     public Spending() {
-    }
-
-    public Spending(int id, BigDecimal bigDecimal, ForWhatEnum clothes, LocalDate now) {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public BigDecimal getAmount() {

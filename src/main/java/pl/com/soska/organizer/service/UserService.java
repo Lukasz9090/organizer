@@ -44,7 +44,6 @@ public class UserService {
 
         Role userRole = roleRepository.findByRole(RoleEnum.ROLE_USER);
         user.setRole(Set.of(userRole));
-        user.setSpending(List.of(new Spending(1, new BigDecimal(125), ForWhatEnum.CLOTHES, LocalDate.now())));
         String passwordHash = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordHash);
         userRepository.save(user);

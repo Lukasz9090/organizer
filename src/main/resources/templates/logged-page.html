@@ -6,5 +6,11 @@
 </head>
 <body>
 <p>hello</p>
+<form th:action="@{/add-spending}" th:object="${newSpending}" method="post">
+    <input th:field="*{amount}" type="text" placeholder="amount"/><br/>
+    <input th:field="*{forWhat}" type="text" placeholder="for"/><br/>
+    <input th:field="*{date}" type="date" placeholder="date"/><br/>
+    <input type="submit" value="Add">
+</form>
 </body>
 </html>
