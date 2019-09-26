@@ -6,5 +6,5 @@ public enum ForWhatEnum {
     COSMETICS,
     FLAT_BILLS, FLAT_OTCHERS,
     CAR_FUEL, CAR_OTHERS,
-    RECREATION, TRAVELS;
+    RECREATION, TRAVEL;
 }
