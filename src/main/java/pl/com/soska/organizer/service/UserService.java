@@ -2,14 +2,18 @@ package pl.com.soska.organizer.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.com.soska.organizer.enums.ForWhatEnum;
 import pl.com.soska.organizer.enums.RoleEnum;
 import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.exception.UserNotFoundException;
 import pl.com.soska.organizer.model.Role;
+import pl.com.soska.organizer.model.Spending;
 import pl.com.soska.organizer.model.User;
 import pl.com.soska.organizer.repository.RoleRepository;
 import pl.com.soska.organizer.repository.UserRepository;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -40,14 +44,22 @@ public class UserService {
 
         Role userRole = roleRepository.findByRole(RoleEnum.ROLE_USER);
         user.setRole(Set.of(userRole));
+        user.setSpending(List.of(new Spending(1, new BigDecimal(125), ForWhatEnum.CLOTHES, LocalDate.now())));
         String passwordHash = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordHash);
         userRepository.save(user);
     }
 
     public void deleteUser(User user) {
-        userRepository.findByEmail(user.getEmail())
+        User userToDelete = userRepository.findByEmail(user.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + user.getEmail() + " was not found."));
-        userRepository.delete(user);
+        userRepository.delete(userToDelete);
+    }
+
+    public void addSpendingToUser(String username, Spending spending) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User with email: " + username + " was not found."));
+        user.getSpending().add(spending);
+        userRepository.save(user);
     }
 }

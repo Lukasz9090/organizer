@@ -6,11 +6,9 @@
 </head>
 <body>
 <h1>Registration form</h1>
-<form action="#" method="post" th:action="@{/register}" th:object="${user}">
-    <p th:errors="*{email}">Email errors</p>
-    <input th:field="*{email}" type="email" placeholder="e-mail:"/><br/>
-    <p th:errors="*{password}">Password errors</p>
-    <input th:field="*{password}" placeholder="Password:"/><br/>
+<form th:action="@{/add-user}" th:object="${newUser}"  method="post">
+    <input th:field="*{email}" type="text" placeholder="e-mail"/><br/>
+    <input th:field="*{password}" type="text" placeholder="password"/><br/>
     <input type="submit" value="Register">
 </form>
 </body>

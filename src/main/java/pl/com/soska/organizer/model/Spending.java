@@ -1,32 +1,27 @@
 package pl.com.soska.organizer.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import pl.com.soska.organizer.enums.ForWhatEnum;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Document
 public class Spending {
-
-    @Id
-    private String id;
-
+    private int id;
     private BigDecimal amount;
-
     private ForWhatEnum forWhat;
-
     private LocalDate date;
 
     public Spending() {
     }
 
-    public String getId() {
+    public Spending(int id, BigDecimal bigDecimal, ForWhatEnum clothes, LocalDate now) {
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -52,5 +47,14 @@ public class Spending {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "Spending{" +
+                "amount=" + amount +
+                ", forWhat=" + forWhat +
+                ", date=" + date +
+                '}';
     }
 }

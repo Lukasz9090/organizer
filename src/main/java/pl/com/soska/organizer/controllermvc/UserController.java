@@ -20,19 +20,23 @@ public class UserController {
 
     @GetMapping("/register")
     public String register (Model model){
-        model.addAttribute("user", new User());
+        model.addAttribute("newUser", new User());
         return "register-form";
     }
 
-    @PostMapping("register")
-    public String addUser(@ModelAttribute User user,
-                          BindingResult bindResult){
-        if(bindResult.hasErrors()){
-            return "register-form";
-        }
-        else {
-            userService.createUser(user);
-            return "register-success";
-        }
+    @PostMapping("/add-user")
+    public String addUser (@ModelAttribute User user){
+        userService.createUser(user);
+        return "register-success";
+    }
+
+    @GetMapping("/login")
+    public String loginPage (){
+        return "login-form";
+    }
+
+    @PostMapping("/login")
+    public String login (){
+        return "register-success";
     }
 }
