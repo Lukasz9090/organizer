@@ -18,7 +18,7 @@ public class User {
     @Email
     @Indexed(unique = true)
     private String email;
-    @Size(min = 6)
+    @Size(min = 6, message = "The password should have a minimum 6 characters.")
     private String password;
 
     @DBRef
