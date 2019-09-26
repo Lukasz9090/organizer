@@ -40,15 +40,25 @@ public class UserController {
     }
 
     @GetMapping("/logged")
-    public String login (Model model){
-        model.addAttribute("newSpending", new Spending());
+    public String login (){
         return "logged-page";
     }
 
-    @PostMapping("/add-spending")
+    @GetMapping("/add-spending")
+    public String login (Model model){
+        model.addAttribute("newSpending", new Spending());
+        return "add-spending-page";
+    }
+
+    @PostMapping("/added-spending")
     public String addSpending(@ModelAttribute Spending spending, Principal principal){
         String username = principal.getName();
         userService.addSpendingToUser(username, spending);
-        return "redirect:logged";
+        return "redirect:add-spending";
+    }
+
+    @GetMapping("/create-report")
+    public String createReport (){
+        return "report-generator-page";
     }
 }

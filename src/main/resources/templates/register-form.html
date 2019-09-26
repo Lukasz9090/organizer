@@ -7,9 +7,7 @@
 <body>
 <h1>Registration form</h1>
 <form th:action="@{/add-user}" th:object="${newUser}"  method="post">
-    <p th:errors="*{email}">Email errors</p>
     <input th:field="*{email}" type="text" placeholder="e-mail"/><br/>
-    <p th:errors="*{password}">Password errors</p>
     <input th:field="*{password}" type="text" placeholder="password"/><br/>
     <input type="submit" value="Register">
 </form>

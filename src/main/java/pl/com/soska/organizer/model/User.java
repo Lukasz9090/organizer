@@ -16,6 +16,7 @@ public class User {
 
     @Id
     private String id;
+
     @Email
     @Indexed(unique = true)
     private String email;

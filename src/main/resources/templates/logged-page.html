@@ -2,25 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Budget organizer</title>
 </head>
 <body>
-<p>Add spending:</p>
-<form th:action="@{/add-spending}" th:object="${newSpending}" method="post">
-    <input th:field="*{amount}" type="text" placeholder="amount"/><br/>
-    <select th:field="*{forWhat}">
-        <option th:value="FOOD" th:text="food"></option>
-        <option th:value="CLOTHES" th:text="clothes"></option>
-        <option th:value="COSMETICS" th:text="cosmetics"></option>
-        <option th:value="FLAT_BILLS" th:text="flat-bills"></option>
-        <option th:value="FLAT_OTCHERS" th:text="flat-others"></option>
-        <option th:value="CAR_FUEL" th:text="car-fuel"></option>
-        <option th:value="CAR_OTHERS" th:text="car-others"></option>
-        <option th:value="RECREATION" th:text="recreation"></option>
-        <option th:value="TRAVEL" th:text="travel"></option>
-    </select>
-    <input th:field="*{date}" type="date" placeholder="date"/><br/>
-    <input type="submit" value="Add">
-</form>
+<h1>Hello</h1>
+<a href="#" th:href="@{/add-spending}">Add new spending</a>
+<a href="#" th:href="@{/create-report}">Generate spending report</a>
+<a href="#" th:href="@{/}">Sign out</a>
 </body>
 </html>

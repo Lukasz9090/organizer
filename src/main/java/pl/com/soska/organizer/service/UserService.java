@@ -2,7 +2,6 @@ package pl.com.soska.organizer.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.com.soska.organizer.enums.ForWhatEnum;
 import pl.com.soska.organizer.enums.RoleEnum;
 import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.exception.UserNotFoundException;
@@ -12,8 +11,6 @@ import pl.com.soska.organizer.model.User;
 import pl.com.soska.organizer.repository.RoleRepository;
 import pl.com.soska.organizer.repository.UserRepository;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
