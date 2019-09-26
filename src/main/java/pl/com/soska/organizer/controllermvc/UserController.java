@@ -49,6 +49,6 @@ public class UserController {
     public String addSpending(@ModelAttribute Spending spending, Principal principal){
         String username = principal.getName();
         userService.addSpendingToUser(username, spending);
-        return "logged-page";
+        return "redirect:logged";
     }
 }
