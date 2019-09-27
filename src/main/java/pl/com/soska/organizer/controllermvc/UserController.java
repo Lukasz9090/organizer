@@ -1,13 +1,19 @@
 package pl.com.soska.organizer.controllermvc;
 
-import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import pl.com.soska.organizer.model.ReportSettings;
 import pl.com.soska.organizer.model.Spending;
 import pl.com.soska.organizer.model.User;
+import pl.com.soska.organizer.service.ReportGenerator;
 import pl.com.soska.organizer.service.UserService;
 
 import java.security.Principal;
@@ -16,9 +22,11 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final ReportGenerator reportGenerator;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ReportGenerator reportGenerator) {
         this.userService = userService;
+        this.reportGenerator = reportGenerator;
     }
 
     @GetMapping("/register")
@@ -27,7 +35,7 @@ public class UserController {
         return "register-form";
     }
 
-    @PostMapping("/add-user")
+    @PostMapping("/added-user")
     public String addUser (@ModelAttribute User user){
         userService.createUser(user);
         return "register-success";
@@ -58,7 +66,24 @@ public class UserController {
     }
 
     @GetMapping("/create-report")
-    public String createReport (){
+    public String createReport (Model model){
+        model.addAttribute("reportSettings", new ReportSettings());
         return "report-generator-page";
+    }
+
+    @PostMapping("/add-data-to-report")
+    @ResponseBody
+    public ResponseEntity<byte[]> addDate (@ModelAttribute ReportSettings reportSettings,
+                                                         Principal principal){
+        String username = principal.getName();
+        System.out.println(reportSettings.getStartDate());
+        System.out.println(reportSettings.getEndDate());
+        System.out.println(reportSettings.getForWhat());
+        byte[] pdfContents = reportGenerator.generatePdfReport(username, reportSettings);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.add("content-disposition", "inline; filename=" + "Spending report.pdf");
+
+        return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
     }
 }

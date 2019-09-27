@@ -6,9 +6,11 @@
 </head>
 <body>
 <p>Add spending:</p>
-<form th:action="@{/added-spending}" th:object="${newSpending}" method="post">
-    <input th:field="*{amount}" type="text" placeholder="amount"/><br/>
+<form th:target="_blank" th:action="@{/add-data-to-report}" th:object="${reportSettings}" method="post">
+    <input th:field="*{startDate}" type="date" placeholder="from date"/><br/>
+    <input th:field="*{endDate}" type="date" placeholder="to date"/><br/>
     <select th:field="*{forWhat}">
+        <option th:value="ALL" th:text="all"></option>
         <option th:value="FOOD" th:text="food"></option>
         <option th:value="CLOTHES" th:text="clothes"></option>
         <option th:value="COSMETICS" th:text="cosmetics"></option>
@@ -19,11 +21,10 @@
         <option th:value="RECREATION" th:text="recreation"></option>
         <option th:value="TRAVEL" th:text="travel"></option>
     </select>
-    <input th:field="*{date}" type="date" placeholder="date"/><br/>
-    <input type="submit" value="       Add       ">
+    <input type="submit" value=" Generate report " >
 </form>
 <form th:action="@{/logged}"  method="get">
-    <input type="submit" value="Back to your page">
+    <input type="submit" value="Back to your page" >
 </form>
 </body>
 </html>

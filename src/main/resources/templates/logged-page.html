@@ -6,8 +6,14 @@
 </head>
 <body>
 <h1>Hello</h1>
-<a href="#" th:href="@{/add-spending}">Add new spending</a>
-<a href="#" th:href="@{/create-report}">Generate spending report</a>
-<a href="#" th:href="@{/}">Sign out</a>
+<form th:action="@{/add-spending}"  method="get">
+    <input type="submit" value="Add new spending" >
+</form>
+<form th:action="@{/create-report}"  method="get">
+    <input type="submit" value=" Create report  " >
+</form>
+<form th:action="@{/}"  method="get">
+    <input type="submit" value="    Sign out    " >
+</form>
 </body>
 </html>

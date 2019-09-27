@@ -6,10 +6,13 @@
 </head>
 <body>
 <h1>Registration form</h1>
-<form th:action="@{/add-user}" th:object="${newUser}"  method="post">
+<form th:action="@{/added-user}" th:object="${newUser}"  method="post">
     <input th:field="*{email}" type="text" placeholder="e-mail"/><br/>
     <input th:field="*{password}" type="text" placeholder="password"/><br/>
     <input type="submit" value="Register">
+</form>
+<form th:action="@{/}"  method="get">
+    <input type="submit" value="     Back      " >
 </form>
 </body>
 </html>
