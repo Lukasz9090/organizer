@@ -6,14 +6,14 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h1>Registration form</h1>
+<h3>REGISTRATION</h3>
 <form th:action="@{/added-user}" th:object="${newUser}"  method="post">
-    <input th:field="*{email}" type="text" placeholder="e-mail"/><br/>
-    <input th:field="*{password}" type="text" placeholder="password"/><br/>
+    <input th:field="*{email}" type="email" placeholder="e-mail"/><br/>
+    <input th:field="*{password}" type="password" placeholder="password"/><br/>
     <input type="submit" value="Register">
 </form>
 <form th:action="@{/}"  method="get">
-    <input type="submit" value="     Back      " >
+    <input type="submit" value="Back" >
 </form>
 </body>
 </html>

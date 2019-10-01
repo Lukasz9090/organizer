@@ -6,9 +6,9 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<p>Add spending:</p>
+<h3>ADD SPENDING</h3>
 <form th:action="@{/added-spending}" th:object="${newSpending}" method="post">
-    <input th:field="*{amount}" type="text" placeholder="amount"/><br/>
+    <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>
     <select th:field="*{forWhat}">
         <option th:value="FOOD" th:text="food"></option>
         <option th:value="CLOTHES" th:text="clothes"></option>
@@ -19,9 +19,9 @@
         <option th:value="CAR_OTHERS" th:text="car-others"></option>
         <option th:value="RECREATION" th:text="recreation"></option>
         <option th:value="TRAVEL" th:text="travel"></option>
-    </select>
-    <input th:field="*{date}" type="date" placeholder="date"/><br/>
-    <input type="submit" value="       Add       ">
+    </select><br>
+    <input th:field="*{date}" type="date" /><br/>
+    <input type="submit" value="Add">
 </form>
 <form th:action="@{/logged}"  method="get">
     <input type="submit" value="Back to your page">

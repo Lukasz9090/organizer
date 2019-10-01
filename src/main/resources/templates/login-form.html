@@ -8,12 +8,12 @@
 <body>
 <h1>Login page</h1>
 <form th:action="@{/login}" method="post">
-    <input name="email" placeholder="e-mail"> <br>
-    <input name="password" placeholder="password"> <br>
-    <input type="submit" value="    Sign in   " />
+    <input type="email" name="email" placeholder="e-mail"> <br>
+    <input type="password" name="password" placeholder="password"> <br>
+    <input type="submit" value="Sign in" />
 </form>
 <form th:action="@{/}"  method="get">
-    <input type="submit" value="     Back      " >
+    <input type="submit" value="Back" >
 </form>
 </body>
 </html>
