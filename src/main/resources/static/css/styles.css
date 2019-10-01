@@ -1,0 +1,34 @@
+body{
+    background: url("../images/dollar-3289367_1920.jpg")
+    no-repeat left top fixed;
+}
+
+input[type="submit"] {
+    width: 200px;
+    padding: 10px 0;
+    margin: 5px 0;
+    box-sizing: border-box;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+input[type="text"], input[type="email"], input[type="password"],  input[type="date"]{
+    width: 200px;
+    padding: 10px 0;
+    margin: 5px 0;
+    box-sizing: border-box;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+select {
+    width: 200px;
+    padding: 10px 0;
+    margin: 5px 0;
+    box-sizing: border-box;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}

@@ -15,10 +15,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    String[] staticResources  =  {
+            "/css/**",
+            "/images/**",
+            "/fonts/**",
+    };
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers(staticResources).permitAll()
                 .antMatchers("/", "/main", "/register", "/register-success", "/added-user").permitAll()
                 .anyRequest().authenticated()
                 .and()

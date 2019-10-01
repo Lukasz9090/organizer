@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Budget organizer</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h1>Hello</h1>
+<h3>YOUR PAGE</h3>
 <form th:action="@{/add-spending}"  method="get">
     <input type="submit" value="Add new spending" >
 </form>
@@ -13,7 +14,7 @@
     <input type="submit" value=" Create report  " >
 </form>
 <form th:action="@{/}"  method="get">
-    <input type="submit" value="    Sign out    " >
+    <input type="submit" value="Sign out" >
 </form>
 </body>
 </html>
