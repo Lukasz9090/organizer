@@ -1,14 +1,11 @@
 package pl.com.soska.organizer.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.NumberFormat;
 import pl.com.soska.organizer.enums.ForWhatEnum;
 import pl.com.soska.organizer.validator.AmountValidator;
 
 import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -16,10 +13,9 @@ public class Spending {
 
 
     @DecimalMin(value = "0", message = "Amount should be greater than 0")
-    @Digits(integer = 7, fraction = 2, message = "Please enter correct amount - e.g 100.00")
     @NotNull(message = "Please enter the amount")
-//    @AmountValidator
-    private BigDecimal amount;
+    @AmountValidator
+    private String amount;
     @NotNull
     private ForWhatEnum forWhat;
     @NotNull(message = "Please select a date")
@@ -29,17 +25,17 @@ public class Spending {
     public Spending() {
     }
 
-    public Spending(BigDecimal amount, ForWhatEnum forWhat, LocalDate date) {
+    public Spending(String amount, ForWhatEnum forWhat, LocalDate date) {
         this.amount = amount;
         this.forWhat = forWhat;
         this.date = date;
     }
 
-    public BigDecimal getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 

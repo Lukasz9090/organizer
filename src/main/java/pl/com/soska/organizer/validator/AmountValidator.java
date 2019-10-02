@@ -9,7 +9,9 @@ import java.lang.annotation.*;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AmountValidator {
-    String message() default "Wrong amount format";
+    String message() default "Wrong amount format.\n" +
+                             "Examples of the correct amount: 15.95\n" +
+                             "Scope: 1 - 999999 ; 0.01 - 999999.99";
     Class<?>[] groups() default {};
     Class<? extends Payload> [] payload()default {};
 }
