@@ -32,3 +32,8 @@ select {
     -moz-border-radius: 5px;
     border-radius: 5px;
 }
+
+p.er {
+    font-size: 15px;
+    color: red;
+}
