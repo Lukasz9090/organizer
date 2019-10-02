@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.model.ReportSettings;
 import pl.com.soska.organizer.model.Spending;
 import pl.com.soska.organizer.model.User;
@@ -33,30 +34,39 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register (Model model){
-        model.addAttribute("newUser", new User());
+    public String register(Model model) {
+        User user = new User();
+        model.addAttribute(user);
         return "register-form";
     }
 
     @PostMapping("/added-user")
-    public String addUser (@ModelAttribute User user){
-        userService.createUser(user);
-        return "register-success";
+    public String addUser(@Valid @ModelAttribute User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "register-form";
+        }
+        try {
+            userService.createUser(user);
+            return "register-success";
+        } catch (UserExistException e) {
+            result.rejectValue("email", "error.user", e.getMessage());
+            return "register-form";
+        }
     }
 
     @GetMapping("/login")
-    public String loginPage (Model model){
+    public String loginPage(Model model) {
         model.addAttribute("user", new User());
         return "login-form";
     }
 
     @GetMapping("/logged")
-    public String login (){
+    public String login() {
         return "logged-page";
     }
 
     @GetMapping("/add-spending")
-    public String login (Model model){
+    public String login(Model model) {
         Spending spending = new Spending();
         model.addAttribute(spending);
         return "add-spending-page";
@@ -65,11 +75,10 @@ public class UserController {
     @PostMapping("/added-spending")
     public String addSpending(@Valid @ModelAttribute Spending spending,
                               BindingResult result,
-                              Principal principal){
-        if (result.hasErrors()){
+                              Principal principal) {
+        if (result.hasErrors()) {
             return "add-spending-page";
-        }
-        else {
+        } else {
             String username = principal.getName();
             userService.addSpendingToUser(username, spending);
             return "redirect:add-spending";
@@ -77,15 +86,15 @@ public class UserController {
     }
 
     @GetMapping("/create-report")
-    public String createReport (Model model){
+    public String createReport(Model model) {
         model.addAttribute("reportSettings", new ReportSettings());
         return "report-generator-page";
     }
 
     @PostMapping("/add-data-to-report")
     @ResponseBody
-    public ResponseEntity<byte[]> addDate (@ModelAttribute ReportSettings reportSettings,
-                                                         Principal principal){
+    public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
+                                          Principal principal) {
 
         String username = principal.getName();
         byte[] pdfContents = reportGenerator.generatePdfReport(username, reportSettings);
