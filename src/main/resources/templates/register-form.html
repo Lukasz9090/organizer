@@ -10,7 +10,10 @@
 <form th:action="@{/added-user}" th:object="${user}"  method="post">
     <p class="er" th:errors="*{email}"></p>
     <input th:field="*{email}" type="email" placeholder="e-mail"/><br/>
-    <input th:field="*{password}" type="password" placeholder="password"/><br/>
+    <p class="er" th:errors="*{password}"></p>
+    <input th:field="*{password}" type="password" placeholder="password"/>
+    <p class="er" th:errors="*{confirmPassword}"></p>
+    <input th:field="*{confirmPassword}" type="password" placeholder="confirm password"/><br/>
     <input type="submit" value="Register">
 </form>
 <form th:action="@{/}"  method="get">
