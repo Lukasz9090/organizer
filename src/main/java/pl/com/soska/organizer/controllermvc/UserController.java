@@ -67,7 +67,7 @@ public class UserController {
         return "add-spending-page";
     }
 
-    @PostMapping("/add-spending-error")
+    @PostMapping("/add-spending")
     public String addSpending(@Valid @ModelAttribute Spending spending,
                               BindingResult result,
                               Principal principal) {
