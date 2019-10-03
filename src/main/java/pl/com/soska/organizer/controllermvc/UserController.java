@@ -6,16 +6,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.model.ReportSettings;
 import pl.com.soska.organizer.model.Spending;
 import pl.com.soska.organizer.model.User;
 import pl.com.soska.organizer.service.ReportGenerator;
 import pl.com.soska.organizer.service.UserService;
 
+import javax.validation.Valid;
 import java.security.Principal;
 
 @Controller
@@ -30,55 +30,68 @@ public class UserController {
     }
 
     @GetMapping("/register")
-    public String register (Model model){
-        model.addAttribute("newUser", new User());
+    public String register(Model model) {
+        User user = new User();
+        model.addAttribute(user);
         return "register-form";
     }
 
     @PostMapping("/added-user")
-    public String addUser (@ModelAttribute User user){
-        userService.createUser(user);
-        return "register-success";
+    public String addUser(@Valid @ModelAttribute User user, BindingResult result) {
+        if (result.hasErrors()) {
+            return "register-form";
+        }
+        try {
+            userService.createUser(user);
+            return "register-success";
+        } catch (UserExistException e) {
+            result.rejectValue("email", "error.user", e.getMessage());
+            return "register-form";
+        }
     }
 
     @GetMapping("/login")
-    public String loginPage (Model model){
-        model.addAttribute("user", new User());
+    public String loginPage() {
         return "login-form";
     }
 
     @GetMapping("/logged")
-    public String login (){
+    public String login() {
         return "logged-page";
     }
 
     @GetMapping("/add-spending")
-    public String login (Model model){
-        model.addAttribute("newSpending", new Spending());
+    public String login(Model model) {
+        Spending spending = new Spending();
+        model.addAttribute(spending);
         return "add-spending-page";
     }
 
-    @PostMapping("/added-spending")
-    public String addSpending(@ModelAttribute Spending spending, Principal principal){
-        String username = principal.getName();
-        userService.addSpendingToUser(username, spending);
-        return "redirect:add-spending";
+    @PostMapping("/add-spending")
+    public String addSpending(@Valid @ModelAttribute Spending spending,
+                              BindingResult result,
+                              Principal principal) {
+        if (result.hasErrors()) {
+            return "add-spending-page";
+        } else {
+            String username = principal.getName();
+            userService.addSpendingToUser(username, spending);
+            return "redirect:add-spending";
+        }
     }
 
     @GetMapping("/create-report")
-    public String createReport (Model model){
-        model.addAttribute("reportSettings", new ReportSettings());
+    public String createReport(Model model) {
+        ReportSettings reportSettings = new ReportSettings();
+        model.addAttribute("reportSettings", reportSettings);
         return "report-generator-page";
     }
 
-    @PostMapping("/add-data-to-report")
+    @PostMapping("/report")
     @ResponseBody
-    public ResponseEntity<byte[]> addDate (@ModelAttribute ReportSettings reportSettings,
-                                                         Principal principal){
+    public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
+                                          Principal principal) {
         String username = principal.getName();
-        System.out.println(reportSettings.getStartDate());
-        System.out.println(reportSettings.getEndDate());
-        System.out.println(reportSettings.getForWhat());
         byte[] pdfContents = reportGenerator.generatePdfReport(username, reportSettings);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);

@@ -110,7 +110,7 @@ public class ReportGenerator {
     private BigDecimal calculateSumOfAmount(List<Spending> filteredList){
         BigDecimal sum = new BigDecimal("0");
             for (Spending spending : filteredList){
-                sum = sum.add(spending.getAmount());
+                sum = sum.add(new BigDecimal(spending.getAmount()));
             }
             return sum;
     }

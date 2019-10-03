@@ -2,32 +2,43 @@ package pl.com.soska.organizer.model;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.com.soska.organizer.enums.ForWhatEnum;
+import pl.com.soska.organizer.validator.CorrectAmount;
+import pl.com.soska.organizer.validator.PastLocalDate;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Spending {
 
-    private BigDecimal amount;
+    @DecimalMin(value = "0", message = "Amount should be greater than 0")
+    @NotNull(message = "Please enter the amount")
+    @CorrectAmount
+    private String amount;
+
+    @NotNull
     private ForWhatEnum forWhat;
+
+    @NotNull(message = "Please select a date")
+    @PastLocalDate
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
 
     public Spending() {
     }
 
-    public Spending(BigDecimal amount, ForWhatEnum forWhat, LocalDate date) {
+    public Spending(String amount, ForWhatEnum forWhat, LocalDate date) {
         this.amount = amount;
         this.forWhat = forWhat;
         this.date = date;
     }
 
-    public BigDecimal getAmount() {
+    public String getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(String amount) {
         this.amount = amount;
     }
 
