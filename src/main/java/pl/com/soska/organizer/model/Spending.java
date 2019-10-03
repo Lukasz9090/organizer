@@ -3,6 +3,7 @@ package pl.com.soska.organizer.model;
 import org.springframework.format.annotation.DateTimeFormat;
 import pl.com.soska.organizer.enums.ForWhatEnum;
 import pl.com.soska.organizer.validator.AmountValidator;
+import pl.com.soska.organizer.validator.PastLocalDate;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -11,15 +12,17 @@ import java.util.Objects;
 
 public class Spending {
 
-
     @DecimalMin(value = "0", message = "Amount should be greater than 0")
     @NotNull(message = "Please enter the amount")
     @AmountValidator
     private String amount;
+
     @NotNull
     private ForWhatEnum forWhat;
+
     @NotNull(message = "Please select a date")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @PastLocalDate
     private LocalDate date;
 
     public Spending() {
