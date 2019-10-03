@@ -99,4 +99,16 @@ public class UserController {
 
         return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
     }
+
+    @GetMapping("/delete-account")
+    public String deleteAccount(){
+        return "delete-page";
+    }
+
+    @DeleteMapping("/confirm-deletion")
+    public String confirmDeleteAccount (Principal principal){
+        String username = principal.getName();
+        userService.deleteUser(username);
+        return "redirect:/";
+    }
 }
