@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete page</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<h3>Do you really want delete your account?</h3>
+<form th:action="@{/confirm-deletion}"  th:method="delete">
+    <input type="submit" value="Confirm deletion" >
+</form>
+<form th:action="@{/logged}"  method="get">
+    <input type="submit" value="Back">
+</form>
+</body>
+</html>

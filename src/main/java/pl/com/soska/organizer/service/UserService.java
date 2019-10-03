@@ -46,9 +46,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(User user) {
-        User userToDelete = userRepository.findByEmail(user.getEmail())
-                .orElseThrow(() -> new UserNotFoundException("User with email: " + user.getEmail() + " was not found."));
+    public void deleteUser(String username) {
+        User userToDelete = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User with email: " + username + " was not found."));
         userRepository.delete(userToDelete);
     }
 
