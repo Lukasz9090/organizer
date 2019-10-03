@@ -7,10 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.model.ReportSettings;
 import pl.com.soska.organizer.model.Spending;
@@ -54,8 +51,7 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String loginPage(Model model) {
-        model.addAttribute("user", new User());
+    public String loginPage() {
         return "login-form";
     }
 

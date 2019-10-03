@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
     <title>Login page</title>
@@ -7,6 +7,7 @@
 </head>
 <body>
 <h1>Login page</h1>
+<p class="er" th:if="${param.error != null}">Incorrect login or password</p>
 <form th:action="@{/login}" method="post">
     <input type="email" name="email" placeholder="e-mail"> <br>
     <input type="password" name="password" placeholder="password"> <br>
