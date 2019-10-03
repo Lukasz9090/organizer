@@ -67,7 +67,7 @@ public class UserController {
         return "add-spending-page";
     }
 
-    @PostMapping("/added-spending")
+    @PostMapping("/add-spending-error")
     public String addSpending(@Valid @ModelAttribute Spending spending,
                               BindingResult result,
                               Principal principal) {
@@ -87,7 +87,7 @@ public class UserController {
         return "report-generator-page";
     }
 
-    @PostMapping("/add-data-to-report")
+    @PostMapping("/report")
     @ResponseBody
     public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
                                           Principal principal) {

@@ -8,7 +8,7 @@
 <body>
 <h3>ADD SPENDING</h3>
 
-<form action="#" th:action="@{/added-spending}" th:object="${spending}" method="post">
+<form action="#" th:action="@{/add-spending}" th:object="${spending}" method="post">
     <p class="er" th:errors="*{amount}"></p>
     <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>
     <select th:field="*{forWhat}">
