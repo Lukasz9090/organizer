@@ -5,10 +5,10 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CorrectAmountValidator implements ConstraintValidator<AmountValidator, String> {
+public class CorrectAmountValidator implements ConstraintValidator<CorrectAmount, String> {
 
     @Override
-    public void initialize(AmountValidator constraintAnnotation) {
+    public void initialize(CorrectAmount constraintAnnotation) {
     }
 
     @Override

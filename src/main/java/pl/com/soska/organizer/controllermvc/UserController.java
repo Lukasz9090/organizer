@@ -82,7 +82,8 @@ public class UserController {
 
     @GetMapping("/create-report")
     public String createReport(Model model) {
-        model.addAttribute("reportSettings", new ReportSettings());
+        ReportSettings reportSettings = new ReportSettings();
+        model.addAttribute("reportSettings", reportSettings);
         return "report-generator-page";
     }
 
@@ -90,7 +91,6 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
                                           Principal principal) {
-
         String username = principal.getName();
         byte[] pdfContents = reportGenerator.generatePdfReport(username, reportSettings);
         HttpHeaders headers = new HttpHeaders();
