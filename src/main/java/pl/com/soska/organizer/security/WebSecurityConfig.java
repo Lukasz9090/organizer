@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/",
             "/login",
             "/register",
-            "/register-success",
+            "/register/***",
             "/added-user"
     };
 

@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.model.ChangePassword;
 import pl.com.soska.organizer.model.User;
-import pl.com.soska.organizer.service.ReportGeneratorService;
 import pl.com.soska.organizer.service.UserService;
 
 import javax.validation.Valid;
@@ -17,37 +16,14 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
-    private final ReportGeneratorService reportGeneratorService;
 
-    public UserController(UserService userService, ReportGeneratorService reportGeneratorService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.reportGeneratorService = reportGeneratorService;
-    }
-
-    @GetMapping("/register")
-    public String register(Model model) {
-        User user = new User();
-        model.addAttribute(user);
-        return "register-form";
-    }
-
-    @PostMapping("/added-user")
-    public String addUser(@Valid @ModelAttribute User user, BindingResult result) {
-        if (result.hasErrors()) {
-            return "register-form";
-        }
-        try {
-            userService.createUser(user);
-            return "register-success";
-        } catch (UserExistException e) {
-            result.rejectValue("email", "error.user", e.getMessage());
-            return "register-form";
-        }
     }
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login-form";
+        return "login-page";
     }
 
     @GetMapping("/logged")
@@ -55,21 +31,44 @@ public class UserController {
         return "logged-page";
     }
 
-    @GetMapping("/delete-account")
-    public String deleteAccount(){
-        return "delete-page";
+    @GetMapping("/register")
+    public String register(Model model) {
+        User user = new User();
+        model.addAttribute(user);
+        return "register-page";
     }
 
-    @DeleteMapping("/confirm-deletion")
-    public String confirmDeleteAccount (@RequestParam String passwordToCheck, Model model, Principal principal){
+    @PostMapping("/register/add-user")
+    public String addUser(@Valid @ModelAttribute User user,
+                          BindingResult result) {
+        if (result.hasErrors()) {
+            return "register-page";
+        }
+        try {
+            userService.createUser(user);
+            return "register-success-page";
+        } catch (UserExistException e) {
+            result.rejectValue("email", "error.user", e.getMessage());
+            return "register-page";
+        }
+    }
+
+    @GetMapping("/delete-account")
+    public String deleteAccount(){
+        return "delete-account-page";
+    }
+
+    @DeleteMapping("/delete-account/confirm")
+    public String confirmDeleteAccount (@RequestParam String passwordToCheck,
+                                        Model model,
+                                        Principal principal){
         String username = principal.getName();
         boolean match = userService.passwordChecking(username, passwordToCheck);
 
         if (!match){
             model.addAttribute("errorMessage", "");
-            return "delete-page";
+            return "delete-account-page";
         }
-
         userService.deleteUser(username);
         return "redirect:/";
     }
@@ -81,10 +80,12 @@ public class UserController {
         return "change-password-page";
     }
 
-    @PostMapping("/change")
-    public String change (@Valid @ModelAttribute ChangePassword changePassword, BindingResult result, Principal principal){
-
-        boolean match = userService.passwordChecking(principal.getName(), changePassword.getOldPassword());
+    @PostMapping("/change-password/confirm")
+    public String change (@Valid @ModelAttribute ChangePassword changePassword,
+                          BindingResult result,
+                          Principal principal){
+        String username = principal.getName();
+        boolean match = userService.passwordChecking(username, changePassword.getOldPassword());
 
         if (!match){
             result.rejectValue("oldPassword", "error.changePassword", "Wrong old password");
@@ -94,7 +95,7 @@ public class UserController {
         if (result.hasErrors()){
             return "change-password-page";
         }
-        userService.changePassword(principal.getName(), changePassword.getNewPassword());
-        return "success-password-change";
+        userService.changePassword(username, changePassword.getNewPassword());
+        return "success-password-change-page";
     }
 }

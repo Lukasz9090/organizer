@@ -7,7 +7,7 @@
 </head>
 <body>
 <h3>Enter your password to delete account</h3>
-<form th:action="@{/confirm-deletion}"  th:method="delete">
+<form th:action="@{/delete-account/confirm}"  th:method="delete">
     <p class="er" th:if="${errorMessage != null}">Incorrect password</p>
     <input type="password" name="passwordToCheck" placeholder="password"/><br/>
     <input type="submit" value="Confirm deletion" >
