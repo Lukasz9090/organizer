@@ -84,7 +84,7 @@ public class UserController {
     @GetMapping("/create-report")
     public String createReport(Model model) {
         ReportSettings reportSettings = new ReportSettings();
-        model.addAttribute("reportSettings", reportSettings);
+        model.addAttribute(reportSettings);
         return "report-generator-page";
     }
 
@@ -107,8 +107,15 @@ public class UserController {
     }
 
     @DeleteMapping("/confirm-deletion")
-    public String confirmDeleteAccount (Principal principal){
+    public String confirmDeleteAccount (@RequestParam String passwordToCheck, Model model, Principal principal){
         String username = principal.getName();
+        boolean match = userService.passwordChecking(username, passwordToCheck);
+
+        if (!match){
+            model.addAttribute("errorMessage", "");
+            return "delete-page";
+        }
+
         userService.deleteUser(username);
         return "redirect:/";
     }
