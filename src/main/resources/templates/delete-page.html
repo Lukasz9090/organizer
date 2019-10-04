@@ -6,8 +6,10 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h3>Do you really want delete your account?</h3>
+<h3>Enter your password to delete account</h3>
 <form th:action="@{/confirm-deletion}"  th:method="delete">
+    <p class="er" th:if="${errorMessage != null}">Incorrect password</p>
+    <input type="password" name="passwordToCheck" placeholder="password"/><br/>
     <input type="submit" value="Confirm deletion" >
 </form>
 <form th:action="@{/logged}"  method="get">
