@@ -52,12 +52,7 @@ public class UserService {
         userRepository.delete(userToDelete);
     }
 
-    public void addSpendingToUser(String username, Spending spending) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User with email: " + username + " was not found."));
-        user.getSpending().add(spending);
-        userRepository.save(user);
-    }
+
 
     public boolean passwordChecking(String username, String oldPasswordToCheck){
         String oldPasswordInDb = getUserByUsername(username).getPassword();

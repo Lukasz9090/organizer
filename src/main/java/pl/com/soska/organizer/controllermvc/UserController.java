@@ -61,25 +61,7 @@ public class UserController {
         return "logged-page";
     }
 
-    @GetMapping("/add-spending")
-    public String login(Model model) {
-        Spending spending = new Spending();
-        model.addAttribute(spending);
-        return "add-spending-page";
-    }
 
-    @PostMapping("/add-spending")
-    public String addSpending(@Valid @ModelAttribute Spending spending,
-                              BindingResult result,
-                              Principal principal) {
-        if (result.hasErrors()) {
-            return "add-spending-page";
-        } else {
-            String username = principal.getName();
-            userService.addSpendingToUser(username, spending);
-            return "redirect:add-spending";
-        }
-    }
 
     @GetMapping("/create-report")
     public String createReport(Model model) {
