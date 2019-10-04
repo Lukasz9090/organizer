@@ -1,7 +1,6 @@
 package pl.com.soska.organizer.service;
 
 import com.openhtmltopdf.pdfboxout.PdfRendererBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -23,12 +22,12 @@ import java.util.stream.Collectors;
 import static pl.com.soska.organizer.enums.ForWhatEnum.ALL;
 
 @Service
-public class ReportGenerator {
+public class ReportGeneratorService {
 
     private final UserRepository userRepository;
     private final SpringTemplateEngine springTemplateEngine;
 
-    public ReportGenerator(UserRepository userRepository, SpringTemplateEngine springTemplateEngine) {
+    public ReportGeneratorService(UserRepository userRepository, SpringTemplateEngine springTemplateEngine) {
         this.userRepository = userRepository;
         this.springTemplateEngine = springTemplateEngine;
     }
@@ -39,7 +38,7 @@ public class ReportGenerator {
                 reportSettings.getEndDate(),
                 reportSettings.getForWhat());
 
-        String processedHtml = springTemplateEngine.process("spendingPdfReport", ctx);
+        String processedHtml = springTemplateEngine.process("report-generator-pdf-template", ctx);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PdfRendererBuilder builder = new PdfRendererBuilder();
         try {
