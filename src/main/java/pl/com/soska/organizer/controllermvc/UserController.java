@@ -53,26 +53,6 @@ public class UserController {
         }
     }
 
-    @GetMapping("/delete-account")
-    public String deleteAccount(){
-        return "delete-account-page";
-    }
-
-    @DeleteMapping("/delete-account/confirm")
-    public String confirmDeleteAccount (@RequestParam String passwordToCheck,
-                                        Model model,
-                                        Principal principal){
-        String username = principal.getName();
-        boolean match = userService.passwordChecking(username, passwordToCheck);
-
-        if (!match){
-            model.addAttribute("errorMessage", "");
-            return "delete-account-page";
-        }
-        userService.deleteUser(username);
-        return "redirect:/";
-    }
-
     @GetMapping("/change-password")
     public String changePassword(Model model){
         ChangePassword changePassword = new ChangePassword();
@@ -97,5 +77,25 @@ public class UserController {
         }
         userService.changePassword(username, changePassword.getNewPassword());
         return "success-password-change-page";
+    }
+
+    @GetMapping("/delete-account")
+    public String deleteAccount(){
+        return "delete-account-page";
+    }
+
+    @DeleteMapping("/delete-account/confirm")
+    public String confirmDeleteAccount (@RequestParam String passwordToCheck,
+                                        Model model,
+                                        Principal principal){
+        String username = principal.getName();
+        boolean match = userService.passwordChecking(username, passwordToCheck);
+
+        if (!match){
+            model.addAttribute("errorMessage", "");
+            return "delete-account-page";
+        }
+        userService.deleteUser(username);
+        return "redirect:/";
     }
 }

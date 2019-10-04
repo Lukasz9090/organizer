@@ -6,7 +6,6 @@ import pl.com.soska.organizer.enums.RoleEnum;
 import pl.com.soska.organizer.exception.UserExistException;
 import pl.com.soska.organizer.exception.UserNotFoundException;
 import pl.com.soska.organizer.model.Role;
-import pl.com.soska.organizer.model.Spending;
 import pl.com.soska.organizer.model.User;
 import pl.com.soska.organizer.repository.RoleRepository;
 import pl.com.soska.organizer.repository.UserRepository;
@@ -28,11 +27,6 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User getUserByUsername(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found."));
-    }
-
     public void createUser(User user) {
         Optional<User> usernameExist = userRepository.findByEmail(user.getEmail());
         if (usernameExist.isPresent()) {
@@ -46,17 +40,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(String username) {
-        User userToDelete = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User with email: " + username + " was not found."));
-        userRepository.delete(userToDelete);
-    }
-
-
-
     public boolean passwordChecking(String username, String oldPasswordToCheck){
         String oldPasswordInDb = getUserByUsername(username).getPassword();
         return passwordEncoder.matches(oldPasswordToCheck, oldPasswordInDb);
+    }
+
+    private User getUserByUsername(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found."));
     }
 
     public void changePassword(String username, String newPassword){
@@ -65,5 +56,10 @@ public class UserService {
 
         userToChangePassword.setPassword(passwordHash);
         userRepository.save(userToChangePassword);
+    }
+
+    public void deleteUser(String username) {
+        User userToDelete = getUserByUsername(username);
+        userRepository.delete(userToDelete);
     }
 }
