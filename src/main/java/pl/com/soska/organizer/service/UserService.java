@@ -58,4 +58,17 @@ public class UserService {
         user.getSpending().add(spending);
         userRepository.save(user);
     }
+
+    public boolean passwordChecking(String username, String oldPasswordToCheck){
+        String oldPasswordInDb = getUserByUsername(username).getPassword();
+        return passwordEncoder.matches(oldPasswordToCheck, oldPasswordInDb);
+    }
+
+    public void changePassword(String username, String newPassword){
+        User userToChangePassword = getUserByUsername(username);
+        String passwordHash = passwordEncoder.encode(newPassword);
+
+        userToChangePassword.setPassword(passwordHash);
+        userRepository.save(userToChangePassword);
+    }
 }

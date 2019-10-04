@@ -1,6 +1,6 @@
 body{
     background: url("../images/money.jpg")
-    no-repeat left top fixed;
+    no-repeat left top fixed;background-size: cover;
 }
 
 input[type="submit"] {
