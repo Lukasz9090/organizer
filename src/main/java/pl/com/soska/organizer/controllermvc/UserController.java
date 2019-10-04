@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.com.soska.organizer.exception.UserExistException;
+import pl.com.soska.organizer.model.ChangePassword;
 import pl.com.soska.organizer.model.ReportSettings;
 import pl.com.soska.organizer.model.Spending;
 import pl.com.soska.organizer.model.User;
@@ -110,5 +111,29 @@ public class UserController {
         String username = principal.getName();
         userService.deleteUser(username);
         return "redirect:/";
+    }
+
+    @GetMapping("/change-password")
+    public String changePassword(Model model){
+        ChangePassword changePassword = new ChangePassword();
+        model.addAttribute(changePassword);
+        return "change-password-page";
+    }
+
+    @PostMapping("/change")
+    public String change (@Valid @ModelAttribute ChangePassword changePassword, BindingResult result, Principal principal){
+
+        boolean match = userService.passwordChecking(principal.getName(), changePassword.getOldPassword());
+
+        if (!match){
+            result.rejectValue("oldPassword", "error.changePassword", "Wrong old password");
+            return "change-password-page";
+        }
+
+        if (result.hasErrors()){
+            return "change-password-page";
+        }
+        userService.changePassword(principal.getName(), changePassword.getNewPassword());
+        return "success-password-change";
     }
 }
