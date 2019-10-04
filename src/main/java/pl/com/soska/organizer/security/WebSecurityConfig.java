@@ -25,7 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String [] publicAddresses = {
             "/",
-            "/main",
             "/login",
             "/register",
             "/register-success",
