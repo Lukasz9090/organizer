@@ -65,11 +65,10 @@ public class UserController {
                           BindingResult result,
                           Principal principal){
         String username = principal.getName();
-        boolean match = userService.passwordChecking(username, changePassword.getOldPassword());
+        boolean passwordMatchingCheck = userService.passwordChecking(username, changePassword.getOldPassword());
 
-        if (!match){
+        if (!passwordMatchingCheck){
             result.rejectValue("oldPassword", "error.changePassword", "Wrong old password");
-            return "change-password-page";
         }
 
         if (result.hasErrors()){
@@ -89,9 +88,9 @@ public class UserController {
                                         Model model,
                                         Principal principal){
         String username = principal.getName();
-        boolean match = userService.passwordChecking(username, passwordToCheck);
+        boolean passwordMatchingCheck = userService.passwordChecking(username, passwordToCheck);
 
-        if (!match){
+        if (!passwordMatchingCheck){
             model.addAttribute("errorMessage", "");
             return "delete-account-page";
         }

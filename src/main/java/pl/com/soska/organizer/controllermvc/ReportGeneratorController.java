@@ -39,7 +39,6 @@ public class ReportGeneratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.add("content-disposition", "inline; filename=" + "Spending report.pdf");
-
         return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
     }
 }
