@@ -6,7 +6,7 @@ import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = PastLocalDateValidator.class)
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PastLocalDate {
     String message() default "The date should be from today or from the past";
