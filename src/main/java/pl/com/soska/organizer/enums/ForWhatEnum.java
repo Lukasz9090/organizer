@@ -4,8 +4,8 @@ public enum ForWhatEnum {
     FOOD("food"),
     CLOTHES("clothes"),
     COSMETICS("cosmetics"),
-    FLAT_BILLS("flat-bills"), FLAT_OTCHERS("flat-other"),
-    CAR_FUEL("car-fuel"), CAR_OTHERS("car-others"),
+    FLAT_BILLS("flat-bills"), FLAT_OTHER("flat-other"),
+    CAR_FUEL("car-fuel"), CAR_OTHER("car-other"),
     RECREATION("recreation"), TRAVEL("travel"),
     ALL("all");
 
