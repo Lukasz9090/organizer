@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -12,21 +14,29 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
-class SpendingControllerTest {
+class ReportGeneratorControllerTest {
 
     private MockMvc mockMvc;
 
-    @Autowired SpendingController spendingController;
+    @Autowired
+    ReportGeneratorController reportGeneratorController;
+
+    @Autowired
+    TestRestTemplate testRestTemplate;
+
+    @LocalServerPort private int port;
+
+    private String rootUrl = "http://localhost:";
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(spendingController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(reportGeneratorController).build();
     }
 
     @Test
-    public void testSpendingPage() throws Exception {
-        this.mockMvc.perform(get("/add-spending"))
+    public void testCreateReport() throws Exception {
+        this.mockMvc.perform(get("/report"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("add-spending-page"));
+                .andExpect(view().name("report-generator-page"));
     }
 }
