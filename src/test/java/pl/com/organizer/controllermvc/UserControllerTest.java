@@ -15,8 +15,9 @@ import pl.com.organizer.model.User;
 import pl.com.organizer.repository.RoleRepository;
 import pl.com.organizer.repository.UserRepository;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.security.Principal;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -34,6 +35,13 @@ class UserControllerTest {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    Principal principal = new Principal() {
+        @Override
+        public String getName() {
+            return "test@mail.com";
+        }
+    };
 
     @BeforeEach
     public void setup() {
@@ -111,14 +119,44 @@ class UserControllerTest {
     }
 
     @Test
-    public void testChangePassword() throws Exception {
+    public void testChangePasswordPage() throws Exception {
         this.mockMvc.perform(get("/change-password"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("change-password-page"));
     }
 
     @Test
-    public void testDeleteAccount() throws Exception {
+    public void testChangePasswordSuccess() throws Exception {
+        ChangePassword changePassword = correctChangePassword();
+        this.mockMvc.perform(post("/change-password/confirm")
+                .with(MockMvcRequestBuilderUtils.form(changePassword))
+                .principal(principal))
+                .andExpect(status().isOk())
+                .andExpect(view().name("success-password-change-page"));
+    }
+
+    @Test
+    public void testChangePasswordWithErrorWhereOldPasswordIsIncorrect() throws Exception {
+        ChangePassword changePassword = incorrectChangePassword();
+        this.mockMvc.perform(post("/change-password/confirm")
+                .with(MockMvcRequestBuilderUtils.form(changePassword))
+                .principal(principal))
+                .andExpect(status().isOk())
+                .andExpect(view().name("change-password-page"));
+    }
+
+    @Test
+    public void testChangePasswordWithErrorWhereWhereNewPasswordAndConfirmNewPasswordNotMatch() throws Exception {
+        ChangePassword changePassword = incorrectChangePasswordNotMatch();
+        this.mockMvc.perform(post("/change-password/confirm")
+                .with(MockMvcRequestBuilderUtils.form(changePassword))
+                .principal(principal))
+                .andExpect(status().isOk())
+                .andExpect(view().name("change-password-page"));
+    }
+
+    @Test
+    public void testDeleteAccountPage() throws Exception {
         this.mockMvc.perform(get("/delete-account"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("delete-account-page"));
@@ -153,6 +191,22 @@ class UserControllerTest {
         changePassword.setOldPassword("testPassword");
         changePassword.setNewPassword("testPassword2");
         changePassword.setConfirmNewPassword("testPassword2");
+        return changePassword;
+    }
+
+    public ChangePassword incorrectChangePassword() {
+        ChangePassword changePassword = new ChangePassword();
+        changePassword.setOldPassword("testPassword15");
+        changePassword.setNewPassword("testPassword2");
+        changePassword.setConfirmNewPassword("testPassword2");
+        return changePassword;
+    }
+
+    public ChangePassword incorrectChangePasswordNotMatch() {
+        ChangePassword changePassword = new ChangePassword();
+        changePassword.setOldPassword("testPassword");
+        changePassword.setNewPassword("testPassword2");
+        changePassword.setConfirmNewPassword("testPassword3");
         return changePassword;
     }
 }
