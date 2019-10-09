@@ -18,9 +18,9 @@ import pl.com.organizer.repository.UserRepository;
 import java.security.Principal;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+//TODO - add test for delete method
 //@RunWith(SpringRunner.class)
 @SpringBootTest
 class UserControllerTest {
@@ -81,8 +81,10 @@ class UserControllerTest {
         userRepository.findByEmail("test@mail.com").ifPresent(user -> userRepository.delete(user));
 
         User correctUser = createCorrectUser();
-        this.mockMvc.perform(post("/register/add-user")
-                .with(MockMvcRequestBuilderUtils.form(correctUser)))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/register/add-user", correctUser))
                 .andExpect(MockMvcResultMatchers.model().hasNoErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("register-success-page"));
@@ -91,8 +93,10 @@ class UserControllerTest {
     @Test
     public void testAddUserWithErrorWhereSecondTimeIsEnteredTheSameEmail() throws Exception {
         User correctUser = createCorrectUser();
-        this.mockMvc.perform(post("/register/add-user")
-                .with(MockMvcRequestBuilderUtils.form(correctUser)))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/register/add-user", correctUser))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("register-page"));
@@ -101,8 +105,10 @@ class UserControllerTest {
     @Test
     public void testAddUserWithErrorWhereEmailIsIncorrect() throws Exception {
         User userWithIncorrectEmail = createUserWhereEmailIsIncorrect();
-        this.mockMvc.perform(post("/register/add-user")
-                .with(MockMvcRequestBuilderUtils.form(userWithIncorrectEmail)))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/register/add-user", userWithIncorrectEmail))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("register-page"));
@@ -111,8 +117,10 @@ class UserControllerTest {
     @Test
     public void testAddUserWithErrorWherePasswordAndConfirmPasswordAreNotMatch() throws Exception {
         User userWithIncorrectPasswords = createUserWherePasswordAndConfirmPasswordAreNotMatch();
-        this.mockMvc.perform(post("/register/add-user")
-                .with(MockMvcRequestBuilderUtils.form(userWithIncorrectPasswords)))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/register/add-user", userWithIncorrectPasswords))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("register-page"));
@@ -120,7 +128,8 @@ class UserControllerTest {
 
     @Test
     public void testChangePasswordPage() throws Exception {
-        this.mockMvc.perform(get("/change-password"))
+        this.mockMvc
+                .perform(get("/change-password"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("change-password-page"));
     }
@@ -128,9 +137,12 @@ class UserControllerTest {
     @Test
     public void testChangePasswordSuccess() throws Exception {
         ChangePassword changePassword = correctChangePassword();
-        this.mockMvc.perform(post("/change-password/confirm")
-                .with(MockMvcRequestBuilderUtils.form(changePassword))
-                .principal(principal))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/change-password/confirm", changePassword)
+                        .principal(principal))
+                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("success-password-change-page"));
     }
@@ -138,19 +150,25 @@ class UserControllerTest {
     @Test
     public void testChangePasswordWithErrorWhereOldPasswordIsIncorrect() throws Exception {
         ChangePassword changePassword = incorrectChangePassword();
-        this.mockMvc.perform(post("/change-password/confirm")
-                .with(MockMvcRequestBuilderUtils.form(changePassword))
-                .principal(principal))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/change-password/confirm", changePassword)
+                        .principal(principal))
+                .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("change-password-page"));
     }
 
     @Test
-    public void testChangePasswordWithErrorWhereWhereNewPasswordAndConfirmNewPasswordNotMatch() throws Exception {
+    public void testChangePasswordWithErrorWhereNewPasswordAndConfirmNewPasswordNotMatch() throws Exception {
         ChangePassword changePassword = incorrectChangePasswordNotMatch();
-        this.mockMvc.perform(post("/change-password/confirm")
-                .with(MockMvcRequestBuilderUtils.form(changePassword))
-                .principal(principal))
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/change-password/confirm", changePassword)
+                        .principal(principal))
+                .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(status().isOk())
                 .andExpect(view().name("change-password-page"));
     }
