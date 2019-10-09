@@ -36,7 +36,7 @@ public class SpendingController {
             return "add-spending-page";
         } else {
             spendingService.addSpendingToUser(principal.getName(), spending);
-            return "redirect:add-spending";
+            return "redirect:/add-spending";
         }
     }
 }

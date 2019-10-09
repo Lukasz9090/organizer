@@ -36,7 +36,7 @@ class UserControllerTest {
     @Autowired
     private RoleRepository roleRepository;
 
-    Principal principal = new Principal() {
+    private Principal principal = new Principal() {
         @Override
         public String getName() {
             return "test@mail.com";

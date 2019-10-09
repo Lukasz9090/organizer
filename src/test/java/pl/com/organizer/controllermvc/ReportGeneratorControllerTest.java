@@ -21,13 +21,6 @@ class ReportGeneratorControllerTest {
     @Autowired
     ReportGeneratorController reportGeneratorController;
 
-    @Autowired
-    TestRestTemplate testRestTemplate;
-
-    @LocalServerPort private int port;
-
-    private String rootUrl = "http://localhost:";
-
     @BeforeEach
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(reportGeneratorController).build();
