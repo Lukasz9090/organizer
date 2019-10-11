@@ -54,7 +54,7 @@ public class UserService {
                 .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number"));
 
         userToConfirmEmail.setEmailAddressConfirmationStatus(true);
-        userToConfirmEmail.setConfirmationNumber("confirmed");
+        userToConfirmEmail.setConfirmationNumber("Confirmed");
         userRepository.save(userToConfirmEmail);
     }
 

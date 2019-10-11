@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import pl.com.organizer.exception.UnconfirmedAccountException;
 import pl.com.organizer.exception.UserNotFoundException;
 import pl.com.organizer.model.Role;
 import pl.com.organizer.model.User;
@@ -27,6 +28,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User not exist!"));
+
+        if (!user.getConfirmationNumber().equals("Confirmed")){
+            throw new UnconfirmedAccountException("You have to confirm your email address before continuing");
+        }
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
