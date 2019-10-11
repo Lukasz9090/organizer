@@ -13,6 +13,7 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Document(collection = "user")
 @FieldMatch(first = "password", second = "confirmPassword", message = "The passwords are different")
@@ -39,6 +40,9 @@ public class User {
 
     private List<Spending> spending = new ArrayList<>();
 
+    private boolean emailAddressConfirmationStatus;
+
+    private String confirmationNumber;
 
     public User() {
     }
@@ -89,5 +93,25 @@ public class User {
 
     public void setSpending(List<Spending> spending) {
         this.spending = spending;
+    }
+
+    public boolean isEmailAddressConfirmationStatus() {
+        return emailAddressConfirmationStatus;
+    }
+
+    public void setEmailAddressConfirmationStatus(boolean emailAddressConfirmationStatus) {
+        this.emailAddressConfirmationStatus = emailAddressConfirmationStatus;
+    }
+
+    public String getConfirmationNumber() {
+        return confirmationNumber;
+    }
+
+    public void setConfirmationNumber(String confirmationNumber) {
+        this.confirmationNumber = confirmationNumber;
+    }
+
+    public String confirmationNumberGenerator(){
+        return UUID.randomUUID().toString();
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.com.organizer.enums.RoleEnum;
 import pl.com.organizer.exception.UserNotFoundException;
+import pl.com.organizer.mail.EmailService;
 import pl.com.organizer.model.Role;
 import pl.com.organizer.model.User;
 import pl.com.organizer.repository.RoleRepository;
@@ -18,13 +19,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public UserService(UserRepository userRepository,
                        RoleRepository roleRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       EmailService emailService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public void createUser(User user) {
@@ -37,7 +41,21 @@ public class UserService {
         user.setRole(Set.of(userRole));
         String passwordHash = passwordEncoder.encode(user.getPassword());
         user.setPassword(passwordHash);
+        user.setConfirmationNumber(user.confirmationNumberGenerator());
+
         userRepository.save(user);
+
+        emailService.send(user.getEmail(), "Budget organizer confirmation link",
+                "http://localhost:8080/confirm-account?id=" + user.getConfirmationNumber());
+    }
+
+    public void confirmEmailAddress (String confirmationNumber){
+        User userToConfirmEmail = userRepository.findByConfirmationNumber(confirmationNumber)
+                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number"));
+
+        userToConfirmEmail.setEmailAddressConfirmationStatus(true);
+        userToConfirmEmail.setConfirmationNumber("Confirmed");
+        userRepository.save(userToConfirmEmail);
     }
 
     public boolean passwordChecking(String username, String oldPasswordToCheck){
