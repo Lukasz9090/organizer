@@ -28,7 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/login",
             "/register",
             "/register/***",
-            "/added-user"
+            "/added-user",
+            "/confirm-account***"
     };
 
     @Override
