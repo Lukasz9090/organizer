@@ -3,8 +3,11 @@ package pl.com.organizer.controllermvc;
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -18,13 +21,16 @@ import pl.com.organizer.repository.UserRepository;
 import java.security.Principal;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 //TODO - add test for delete method
-//@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
@@ -58,7 +64,7 @@ class UserControllerTest {
     @Test
     public void testLoginPage() throws Exception {
         this.mockMvc.perform(get("/login"))
-                .andExpect(status().isOk())
+                .andExpect(status().isOk())//.andDo(print())
                 .andExpect(view().name("login-page"));
     }
 
@@ -86,7 +92,7 @@ class UserControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/register/add-user", correctUser))
                 .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(status().isOk())
+                .andExpect(status().isOk())//.andDo(print())
                 .andExpect(view().name("register-success-page"));
     }
 
@@ -98,7 +104,7 @@ class UserControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/register/add-user", correctUser))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(status().isOk())
+                .andExpect(status().isOk())//.andDo(print())
                 .andExpect(view().name("register-page"));
     }
 
