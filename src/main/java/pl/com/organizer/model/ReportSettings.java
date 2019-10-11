@@ -21,6 +21,12 @@ public class ReportSettings {
     public ReportSettings() {
     }
 
+    public ReportSettings(LocalDate startDate, LocalDate endDate, ForWhatEnum forWhat) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.forWhat = forWhat;
+    }
+
     public LocalDate getStartDate() {
         return startDate;
     }
