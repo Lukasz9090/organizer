@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<h3>ADD SPENDING</h3>
+
+<form action="#" th:action="@{/add-spending}" th:object="${spending}" method="post">
+    <p class="er" th:errors="*{amount}"></p>
+    <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>
+    <select th:field="*{forWhat}">
+        <option th:value="FOOD" th:text="food"></option>
+        <option th:value="CLOTHES" th:text="clothes"></option>
+        <option th:value="COSMETICS" th:text="cosmetics"></option>
+        <option th:value="FLAT_BILLS" th:text="flat-bills"></option>
+        <option th:value="FLAT_OTHER" th:text="flat-others"></option>
+        <option th:value="CAR_FUEL" th:text="car-fuel"></option>
+        <option th:value="CAR_OTHER" th:text="car-other"></option>
+        <option th:value="RECREATION" th:text="recreation"></option>
+        <option th:value="TRAVEL" th:text="travel"></option>
+    </select><br>
+    <p class="er" th:errors="*{date}"></p>
+    <input th:field="*{date}" type="date" /><br/>
+    <input type="submit" value="Add">
+</form>
+<form th:action="@{/logged}"  method="get">
+    <input type="submit" value="Back to your page">
+</form>
+</body>
+</html>
