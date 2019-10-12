@@ -44,6 +44,8 @@ public class User {
 
     private String confirmationNumber;
 
+    private String resetPasswordNumber;
+
     public User() {
     }
 
@@ -109,6 +111,14 @@ public class User {
 
     public void setConfirmationNumber(String confirmationNumber) {
         this.confirmationNumber = confirmationNumber;
+    }
+
+    public String getResetPasswordNumber() {
+        return resetPasswordNumber;
+    }
+
+    public void setResetPasswordNumber(String resetPasswordNumber) {
+        this.resetPasswordNumber = resetPasswordNumber;
     }
 
     public String confirmationNumberGenerator(){
