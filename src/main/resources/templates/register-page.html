@@ -7,7 +7,7 @@
 </head>
 <body>
 <h3>REGISTRATION</h3>
-<form th:action="@{/register/add-user}" th:object="${user}"  method="post">
+<form th:action="@{/home/register}" th:object="${user}"  method="post">
     <p class="er" th:errors="*{email}"></p>
     <input th:field="*{email}" type="email" placeholder="e-mail"/><br/>
     <p class="er" th:errors="*{password}"></p>
@@ -16,7 +16,7 @@
     <input th:field="*{confirmPassword}" type="password" placeholder="confirm password"/><br/>
     <input type="submit" value="Register">
 </form>
-<form th:action="@{/}"  method="get">
+<form th:action="@{/home}"  method="get">
     <input type="submit" value="Back" >
 </form>
 </body>

@@ -22,66 +22,19 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public String loginPage() {
-        return "login-page";
-    }
-
-    @GetMapping("/reset-password")
-    public String resetPassword() {
-        return "reset-password-page";
-    }
-
-    @PostMapping("/reset-password")
-    public String resetPassword(@RequestParam String emailAddress,
-                                Model model) {
-        try {
-            model.addAttribute("message", "Check your mailbox");
-            userService.sendEmailToResetPassword(emailAddress);
-            return "default-success-page";
-        } catch (UserNotFoundException e) {
-            model.addAttribute("errorMessage", "Account with this email does not exist");
-            return "reset-password-page";
-        }
-    }
-
-    @GetMapping("/logged")
+    @GetMapping("/user")
     public String login() {
         return "logged-page";
     }
 
-    @GetMapping("/register")
-    public String register(Model model) {
-        User user = new User();
-        model.addAttribute(user);
-        return "register-page";
-    }
-
-    @PostMapping("/register/add-user")
-    public String addUser(@Valid @ModelAttribute User user,
-                          BindingResult result,
-                          Model model) {
-        if (result.hasErrors()) {
-            return "register-page";
-        }
-        try {
-            userService.createUser(user);
-            model.addAttribute("message", "Check your mailbox and confirm account");
-            return "default-success-page";
-        } catch (UserExistException e) {
-            result.rejectValue("email", "error.user", e.getMessage());
-            return "register-page";
-        }
-    }
-
-    @GetMapping("/change-password")
+    @GetMapping("/user/change-password")
     public String changePassword(Model model) {
         ChangePassword changePassword = new ChangePassword();
         model.addAttribute(changePassword);
         return "change-password-page";
     }
 
-    @PostMapping("/change-password/confirm")
+    @PostMapping("/user/change-password")
     public String change(@Valid @ModelAttribute ChangePassword changePassword,
                          BindingResult result,
                          Principal principal) {
@@ -99,12 +52,12 @@ public class UserController {
         return "success-password-change-page";
     }
 
-    @GetMapping("/delete-account")
+    @GetMapping("/user/delete-account")
     public String deleteAccount() {
         return "delete-account-page";
     }
 
-    @DeleteMapping("/delete-account/confirm")
+    @DeleteMapping("/user/delete-account")
     public String confirmDeleteAccount(@RequestParam String passwordToCheck,
                                        Model model,
                                        Principal principal) {

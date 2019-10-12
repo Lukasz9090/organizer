@@ -24,14 +24,14 @@ public class ReportGeneratorController {
         this.reportGeneratorService = reportGeneratorService;
     }
 
-    @GetMapping("/report")
+    @GetMapping("/user/report")
     public String createReport(Model model) {
         ReportSettings reportSettings = new ReportSettings();
         model.addAttribute(reportSettings);
         return "report-generator-page";
     }
 
-    @PostMapping("/report/created")
+    @PostMapping("/user/report")
     @ResponseBody
     public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
                                           Principal principal) {

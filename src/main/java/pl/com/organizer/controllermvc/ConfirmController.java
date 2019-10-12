@@ -24,7 +24,7 @@ public class ConfirmController {
         this.userService = userService;
     }
 
-    @GetMapping("/confirm-account")
+    @GetMapping("/home/confirm-account")
     public String confirmAccountPage(@RequestParam(value = "id", required = true) String confirmNumber,
                                      Model model) {
         try {
@@ -37,7 +37,7 @@ public class ConfirmController {
         }
     }
 
-    @GetMapping("/set-new-password")
+    @GetMapping("/home/set-new-password")
     public String createNewPassword(@RequestParam(value = "id", required = true) String confirmNumber,
                                     Model model) {
         ChangePassword changePassword = new ChangePassword();
@@ -46,7 +46,7 @@ public class ConfirmController {
         return "create-new-password";
     }
 
-    @PostMapping("/new-password")
+    @PostMapping("/home/set-new-password")
     public String newPass(@RequestParam(value = "id", required = true) String confirmNumber,
                           @Valid @ModelAttribute ChangePassword changePassword,
                           BindingResult result) {

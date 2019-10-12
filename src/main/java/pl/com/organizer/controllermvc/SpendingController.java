@@ -21,14 +21,14 @@ public class SpendingController {
         this.spendingService = spendingService;
     }
 
-    @GetMapping("/add-spending")
+    @GetMapping("/user/add-spending")
     public String spending(Model model) {
         Spending spending = new Spending();
         model.addAttribute(spending);
         return "add-spending-page";
     }
 
-    @PostMapping("/add-spending")
+    @PostMapping("/user/add-spending")
     public String addSpending(@Valid @ModelAttribute Spending spending,
                               BindingResult result,
                               Principal principal) {
@@ -36,7 +36,7 @@ public class SpendingController {
             return "add-spending-page";
         } else {
             spendingService.addSpendingToUser(principal.getName(), spending);
-            return "redirect:/add-spending";
+            return "redirect:/user/add-spending";
         }
     }
 }
