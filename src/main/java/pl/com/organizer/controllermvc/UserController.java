@@ -4,10 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import pl.com.organizer.exception.UserNotFoundException;
 import pl.com.organizer.model.ChangePassword;
-import pl.com.organizer.model.User;
-import pl.com.organizer.exception.UserExistException;
 import pl.com.organizer.service.UserService;
 
 import javax.validation.Valid;
@@ -23,26 +20,26 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String login() {
-        return "logged-page";
+    public String loggedPage() {
+        return "logged-main-page";
     }
 
     @GetMapping("/user/change-password")
-    public String changePassword(Model model) {
+    public String changeAccountPassword(Model model) {
         ChangePassword changePassword = new ChangePassword();
         model.addAttribute(changePassword);
         return "change-password-page";
     }
 
     @PostMapping("/user/change-password")
-    public String change(@Valid @ModelAttribute ChangePassword changePassword,
+    public String changeAccountPassword(@Valid @ModelAttribute ChangePassword changePassword,
                          BindingResult result,
                          Principal principal) {
         String username = principal.getName();
         boolean passwordMatchingCheck = userService.passwordChecking(username, changePassword.getOldPassword());
 
         if (!passwordMatchingCheck) {
-            result.rejectValue("oldPassword", "error.changePassword", "Wrong old password");
+            result.rejectValue("oldPassword", "error.changePassword", "Please enter correct password.");
         }
 
         if (result.hasErrors()) {

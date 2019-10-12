@@ -22,7 +22,7 @@ public class SpendingController {
     }
 
     @GetMapping("/user/add-spending")
-    public String spending(Model model) {
+    public String addSpending(Model model) {
         Spending spending = new Spending();
         model.addAttribute(spending);
         return "add-spending-page";

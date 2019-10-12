@@ -33,7 +33,7 @@ public class ReportGeneratorController {
 
     @PostMapping("/user/report")
     @ResponseBody
-    public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
+    public ResponseEntity<byte[]> setDataToCreateReport(@ModelAttribute ReportSettings reportSettings,
                                           Principal principal) {
         byte[] pdfContents = reportGeneratorService.generatePdfReport(principal.getName(), reportSettings);
         HttpHeaders headers = new HttpHeaders();
