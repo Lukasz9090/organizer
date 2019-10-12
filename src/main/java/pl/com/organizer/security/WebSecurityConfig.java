@@ -29,7 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/register",
             "/register/***",
             "/added-user",
-            "/confirm-account***"
+            "/confirm-account***",
+            "/remind-password***",
+            "/reset***",
+            "/set-new-password***",
+            "/new-password***"
     };
 
     @Override
@@ -49,6 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .logout()
+                .logoutSuccessUrl("/")
                 .permitAll();
     }
 }

@@ -49,6 +49,18 @@ public class UserService {
                 "http://localhost:8080/confirm-account?id=" + user.getConfirmationNumber());
     }
 
+    public void sendEmailToResetPassword(String username){
+        User userToResetPassword = getUserByUsername(username);
+        userToResetPassword.setResetPasswordNumber(userToResetPassword.confirmationNumberGenerator());
+        emailService.send(username, "Budget organizer - reset password", "http://localhost:8080/set-new-password?id=" + userToResetPassword.getResetPasswordNumber());
+        userRepository.save(userToResetPassword);
+    }
+
+    public User findUserByResetPasswordNumber(String confirmResetNumber){
+        return userRepository.findByResetPasswordNumber(confirmResetNumber)
+                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number"));
+    }
+
     public void confirmEmailAddress (String confirmationNumber){
         User userToConfirmEmail = userRepository.findByConfirmationNumber(confirmationNumber)
                 .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number"));
