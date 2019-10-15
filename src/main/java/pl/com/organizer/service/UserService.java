@@ -52,7 +52,8 @@ public class UserService {
     public void sendEmailToResetPassword(String username){
         User userToResetPassword = getUserByUsername(username);
         userToResetPassword.setResetPasswordNumber(userToResetPassword.confirmationNumberGenerator());
-        emailService.send(username, "Budget organizer - reset password", "http://localhost:8080/home/set-new-password?id=" + userToResetPassword.getResetPasswordNumber());
+        emailService.send(username, "Budget organizer - reset password",
+                "http://localhost:8080/home/set-new-password?id=" + userToResetPassword.getResetPasswordNumber());
         userRepository.save(userToResetPassword);
     }
 

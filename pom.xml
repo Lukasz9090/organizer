@@ -15,7 +15,7 @@
     <description>Budget organizer</description>
 
     <properties>
-        <java.version>12</java.version>
+        <java.version>11</java.version>
         <openhtml.version>1.0.0</openhtml.version>
         <org.junit.jupiter.version>5.5.2</org.junit.jupiter.version>
     </properties>
