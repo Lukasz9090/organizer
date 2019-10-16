@@ -15,6 +15,7 @@ import java.security.Principal;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -38,8 +39,8 @@ class SpendingControllerTest {
     }
 
     @Test
-    public void testSpendingPage() throws Exception {
-        this.mockMvc.perform(get("/add-spending"))
+    public void testAddSpendingPage() throws Exception {
+        this.mockMvc.perform(get("/user/add-spending"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("add-spending-page"));
     }
@@ -50,10 +51,11 @@ class SpendingControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
-                        .postForm("/add-spending", newSpending)
+                        .postForm("/user/add-spending", newSpending)
                         .principal(principal))
                 .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(redirectedUrl("/add-spending"));
+                .andExpect(redirectedUrl("/user/add-spending"))
+                .andDo(print());
     }
 
     @Test
@@ -62,7 +64,7 @@ class SpendingControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
-                        .postForm("/add-spending", newSpending)
+                        .postForm("/user/add-spending", newSpending)
                         .principal(principal))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(view().name("add-spending-page"));
@@ -74,7 +76,7 @@ class SpendingControllerTest {
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
-                        .postForm("/add-spending", newSpending)
+                        .postForm("/user/add-spending", newSpending)
                         .principal(principal))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(view().name("add-spending-page"));
