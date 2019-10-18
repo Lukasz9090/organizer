@@ -51,17 +51,18 @@ class ReportGeneratorControllerTest {
     @LocalServerPort
     int randomServerPort;
 
-    private static User correctUserForReport;
-
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(reportGeneratorController).build();
+        createUser();
+    }
 
     public void createUser() {
-
-        Spending spending = new Spending("150.20", ForWhatEnum.CLOTHES, LocalDate.of(2019, 8, 1));
-        ;
-
         Optional<User> userToReport = userRepository.findByEmail("testReport@mail.com");
+
         if (userToReport.isEmpty()) {
-            correctUserForReport = new User();
+            Spending spending = new Spending("150.20", ForWhatEnum.CLOTHES, LocalDate.of(2019, 8, 1));
+            User correctUserForReport = new User();
             correctUserForReport.setEmail("testReport@mail.com");
             correctUserForReport.setPassword("testPassword");
             correctUserForReport.setConfirmPassword("testPassword");
@@ -69,12 +70,6 @@ class ReportGeneratorControllerTest {
 
             userService.createUser(correctUserForReport);
         }
-    }
-
-    @BeforeEach
-    public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(reportGeneratorController).build();
-        createUser();
     }
 
     @Test

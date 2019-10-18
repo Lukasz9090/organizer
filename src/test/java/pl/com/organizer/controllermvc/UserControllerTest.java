@@ -119,6 +119,5 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("delete-account-page"));
     }
-
 //    TODO - add deleteMethodTest
 }

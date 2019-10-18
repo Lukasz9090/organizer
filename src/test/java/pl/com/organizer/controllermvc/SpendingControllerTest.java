@@ -53,9 +53,8 @@ class SpendingControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/add-spending", newSpending)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(redirectedUrl("/user/add-spending"))
-                .andDo(print());
+                .andExpect(MockMvcResultMatchers.model().hasNoErrors())//.andDo(print())
+                .andExpect(redirectedUrl("/user/add-spending"));
     }
 
     @Test

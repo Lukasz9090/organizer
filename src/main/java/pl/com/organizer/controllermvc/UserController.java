@@ -41,7 +41,6 @@ public class UserController {
         if (!passwordMatchingCheck) {
             result.rejectValue("oldPassword", "error.changePassword", "Please enter correct password.");
         }
-
         if (result.hasErrors()) {
             return "change-password-page";
         }

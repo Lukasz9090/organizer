@@ -34,9 +34,8 @@ public class SpendingController {
                               Principal principal) {
         if (result.hasErrors()) {
             return "add-spending-page";
-        } else {
-            spendingService.addSpendingToUser(principal.getName(), spending);
-            return "redirect:/user/add-spending";
         }
+        spendingService.addSpendingToUser(principal.getName(), spending);
+        return "redirect:/user/add-spending";
     }
 }
