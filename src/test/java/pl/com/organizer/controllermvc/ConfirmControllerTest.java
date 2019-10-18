@@ -14,8 +14,7 @@ import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 public class ConfirmControllerTest {
@@ -26,42 +25,51 @@ public class ConfirmControllerTest {
     private ConfirmController confirmController;
 
     @Autowired
+    private MainController mainController;
+
+    @Autowired
     UserRepository userRepository;
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(confirmController).build();
     }
 
-    private User confirmUser;
+    @Test
+    public void testConfirmCreatedAccountWithError() throws Exception {
+        this.mockMvc.perform(get("/home/confirm-account?id=90"))
+                .andExpect(view().name("default-error-page"))
+                .andExpect(model().attribute("message", "Invalid confirmation number. Please contact us."));
+    }
 
-    private void createUserToUseToConfirmAccount() throws Exception {
-        confirmUser = new User();
-        confirmUser.setEmail("testConfirm@mail.com");
-        confirmUser.setPassword("testPassword");
-        confirmUser.setConfirmPassword("testPassword");
+    @Test
+    public void testConfirmCreatedAccountSuccess() throws Exception {
+        createUserToUseForConfirmAccount();
+        this.mockMvc.perform(get("/home/confirm-account?id=2"))
+                .andExpect(status().isOk())//.andDo(print())
+                .andExpect(view().name("default-success-page"))
+                .andExpect(model().attribute("message", "Your e-mail address has been verified. You can sign in now."));
+    }
 
-        Optional<User> userTOConfirmAccount = userRepository.findByEmail("testConfirm@mail.com");
+    private void createUserToUseForConfirmAccount() throws Exception {
+        Optional<User> userToConfirmAccount = userRepository.findByEmail("testConfirmUser@mail.com");
 
-        if (userTOConfirmAccount.isEmpty()) {
-            this.mockMvc
+        if (userToConfirmAccount.isEmpty()) {
+            User newUserToConfirmAccount = new User();
+            newUserToConfirmAccount.setEmail("testConfirmUser@mail.com");
+            newUserToConfirmAccount.setPassword("testPassword");
+            newUserToConfirmAccount.setConfirmPassword("testPassword");
+
+            MockMvcBuilders.standaloneSetup(mainController).build()
                     .perform(MockMvcRequestBuilderUtils
-                            .postForm("/home/register", confirmUser));
+                            .postForm("/home/register", newUserToConfirmAccount));
         }
 
-        Optional<User> user = userRepository.findByEmail("test@mail.com");
+        Optional<User> user = userRepository.findByEmail("testConfirmUser@mail.com");
         if (user.isPresent()) {
             User userToSave = user.get();
             userToSave.setConfirmationNumber("2");
             userRepository.save(userToSave);
         }
-    }
-//TODO - create new user, not using user from MainControllerTest, test result with error
-    @Test
-    public void testConfirmCreatedAccount() throws Exception {
-        createUserToUseToConfirmAccount();
-        this.mockMvc.perform(get("/home/confirm-account?id=2"))
-                .andExpect(status().isOk()).andDo(print())
-                .andExpect(view().name("default-success-page"));
     }
 }

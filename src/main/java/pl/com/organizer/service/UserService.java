@@ -59,12 +59,12 @@ public class UserService {
 
     public User findUserByResetPasswordNumber(String confirmResetNumber){
         return userRepository.findByResetPasswordNumber(confirmResetNumber)
-                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number"));
+                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number. Please contact us."));
     }
 
     public void confirmEmailAddress (String confirmationNumber){
         User userToConfirmEmail = userRepository.findByConfirmationNumber(confirmationNumber)
-                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number"));
+                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number. Please contact us."));
 
         userToConfirmEmail.setEmailAddressConfirmationStatus(true);
         userToConfirmEmail.setConfirmationNumber("Confirmed");

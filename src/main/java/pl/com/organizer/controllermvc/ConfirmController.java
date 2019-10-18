@@ -25,7 +25,7 @@ public class ConfirmController {
             return "default-success-page";
         } catch (UserNotFoundException e) {
             model.addAttribute("message", e.getMessage());
-            return "default-success-page";
+            return "default-error-page";
         }
     }
 }

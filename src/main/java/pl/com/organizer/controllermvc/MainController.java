@@ -3,10 +3,7 @@ package pl.com.organizer.controllermvc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import pl.com.organizer.exception.UserExistException;
 import pl.com.organizer.exception.UserNotFoundException;
 import pl.com.organizer.model.ChangePassword;
@@ -42,17 +39,17 @@ public class MainController {
     @GetMapping("/home/login/reset-password")
     public String resetAccountPasswordWriteEmail() {
         return "reset-password-page-write-email";
-    }
+    }//TODO - add model to create test for post method
 
     @PostMapping("/home/login/new-password")
     public String resetAccountPasswordWriteEmail(@RequestParam String emailAddress,
                                 Model model) {
         try {
-            model.addAttribute("message", "Check your mailbox");
             userService.sendEmailToResetPassword(emailAddress);
+            model.addAttribute("message", "Check your mailbox to continue reset password process.");
             return "default-success-page";
         } catch (UserNotFoundException e) {
-            model.addAttribute("errorMessage", "Account with this email does not exist");
+            model.addAttribute("errorMessage", "Account with this email does not exist.");
             return "reset-password-page-write-email";
         }
     }
@@ -80,8 +77,8 @@ public class MainController {
             model.addAttribute("message", "Password reset with success. You can sign in now.");
             return "default-success-page";
         } catch (UserNotFoundException e) {
-//            TODO add something when exception
-            return "main-page";
+            model.addAttribute("message", e.getMessage());
+            return "default-error-page";
         }
     }
 

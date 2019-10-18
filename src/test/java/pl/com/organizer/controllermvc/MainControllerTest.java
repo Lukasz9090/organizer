@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.com.organizer.enums.RoleEnum;
+import pl.com.organizer.model.ChangePassword;
 import pl.com.organizer.model.Role;
 import pl.com.organizer.model.User;
 import pl.com.organizer.repository.RoleRepository;
@@ -17,6 +18,7 @@ import pl.com.organizer.repository.UserRepository;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -32,9 +34,6 @@ public class MainControllerTest {
 
     @Autowired
     private RoleRepository roleRepository;
-
-    private User correctStaticUser;
-
 
     @BeforeEach
     public void setup() {
@@ -75,30 +74,89 @@ public class MainControllerTest {
                 .andExpect(status().isOk())//.andDo(print())
                 .andExpect(view().name("reset-password-page-write-email"));
     }
+
     //TODO - post method to resetAccountPasswordWriteEmail
 
     public void createUserToUseInPasswordResetFeature() throws Exception {
-        correctStaticUser = new User();
-        correctStaticUser.setEmail("testStatic@mail.com");
-        correctStaticUser.setPassword("testPassword");
-        correctStaticUser.setConfirmPassword("testPassword");
+        Optional<User> userToUserInPasswordResetFeature = userRepository.findByEmail("testResetPassword@mail.com");
 
-        Optional<User> staticUser = userRepository.findByEmail("testStatic@mail.com");
+        if (userToUserInPasswordResetFeature.isEmpty()){
+            User newUserToUserInPasswordResetFeature = new User();
+            newUserToUserInPasswordResetFeature.setEmail("testResetPassword@mail.com");
+            newUserToUserInPasswordResetFeature.setPassword("testPassword");
+            newUserToUserInPasswordResetFeature.setConfirmPassword("testPassword");
 
-        if (staticUser.isEmpty()){
             this.mockMvc
                     .perform(MockMvcRequestBuilderUtils
-                            .postForm("/home/register", correctStaticUser));
+                            .postForm("/home/register", newUserToUserInPasswordResetFeature));
+        }
+
+        Optional<User> userToResetPassword = userRepository.findByEmail("testResetPassword@mail.com");
+
+        if(userToResetPassword.isPresent()){
+            userToResetPassword.get().setResetPasswordNumber("2");
+            userRepository.save(userToResetPassword.get());
         }
     }
 
     @Test
     public void testResetAccountPasswordSetNewPassword() throws Exception {
+        createUserToUseInPasswordResetFeature();
         this.mockMvc.perform(get("/home/set-new-password?id=2"))
+                .andExpect(status().isOk()).andDo(print())
+                .andExpect(view().name("reset-password-page-write-new-password"));
+    }
+
+    @Test
+    public void testResetAccountPasswordSetNewPasswordSuccess() throws Exception {
+        createUserToUseInPasswordResetFeature();
+        ChangePassword newCorrectPasswordToResetTheOldOne = createCorrectPassword();
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/home/set-new-password?id=2", newCorrectPasswordToResetTheOldOne))
+                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
+                .andExpect(status().isOk())//.andDo(print())
+                .andExpect(view().name("default-success-page"))
+                .andExpect(model().attribute("message", "Password reset with success. You can sign in now."));
+    }
+
+    public ChangePassword createCorrectPassword() {
+        ChangePassword changePassword = new ChangePassword();
+        changePassword.setNewPassword("testPassword50");
+        changePassword.setConfirmNewPassword("testPassword50");
+        return changePassword;
+    }
+
+    @Test
+    public void resetAccountPasswordSetNewPasswordWithError() throws Exception {
+        ChangePassword incorrectPasswordToReset = createIncorrectPassword();
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/home/set-new-password?id=2", incorrectPasswordToReset))
+                .andExpect(MockMvcResultMatchers.model().hasErrors())
                 .andExpect(status().isOk())//.andDo(print())
                 .andExpect(view().name("reset-password-page-write-new-password"));
     }
-    //TODO - post method to resetAccountPasswordSetNewPassword
+
+    public ChangePassword createIncorrectPassword() {
+        ChangePassword changePassword = new ChangePassword();
+        changePassword.setNewPassword("testPassword0");
+        changePassword.setConfirmNewPassword("testPassword50");
+        return changePassword;
+    }
+
+    @Test
+    public void resetAccountPasswordWrongConfirmationNumberToCreatePassword() throws Exception {
+        ChangePassword createCorrectPassword = createCorrectPassword();
+
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/home/set-new-password?id=250", createCorrectPassword))
+                .andExpect(view().name("default-error-page"))
+        .andExpect(model().attribute("message", "Invalid confirmation number. Please contact us."));
+    }
 
     @Test
     public void testRegisterNewUser() throws Exception {
@@ -110,7 +168,6 @@ public class MainControllerTest {
     @Test
     public void testRegisterNewUserSuccess() throws Exception {
         userRepository.findByEmail("test@mail.com").ifPresent(user -> userRepository.delete(user));
-
         User correctUser = createCorrectUser();
 
         this.mockMvc
@@ -118,7 +175,8 @@ public class MainControllerTest {
                         .postForm("/home/register", correctUser))
                 .andExpect(MockMvcResultMatchers.model().hasNoErrors())
                 .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("default-success-page"));
+                .andExpect(view().name("default-success-page"))
+        .andExpect(model().attribute("message", "Check your mailbox and confirm your account."));
     }
 
     public User createCorrectUser() {
