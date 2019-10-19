@@ -24,16 +24,16 @@ public class ReportGeneratorController {
         this.reportGeneratorService = reportGeneratorService;
     }
 
-    @GetMapping("/report")
+    @GetMapping("/user/report")
     public String createReport(Model model) {
         ReportSettings reportSettings = new ReportSettings();
         model.addAttribute(reportSettings);
         return "report-generator-page";
     }
 
-    @PostMapping("/report/created")
+    @PostMapping("/user/report")
     @ResponseBody
-    public ResponseEntity<byte[]> addDate(@ModelAttribute ReportSettings reportSettings,
+    public ResponseEntity<byte[]> setDataToCreateReport(@ModelAttribute ReportSettings reportSettings,
                                           Principal principal) {
         byte[] pdfContents = reportGeneratorService.generatePdfReport(principal.getName(), reportSettings);
         HttpHeaders headers = new HttpHeaders();

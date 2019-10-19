@@ -8,15 +8,15 @@
 <body>
 <h1>Login page</h1>
 <p class="er" th:if="${param.error != null}">Incorrect login or password</p>
-<form th:action="@{/login}" method="post">
+<form th:action="@{/home/login}" method="post">
     <input type="email" name="email" placeholder="e-mail"> <br>
     <input type="password" name="password" placeholder="password"> <br>
     <input type="submit" value="Sign in"/>
 </form>
-<form th:action="@{/}"  method="get">
+<form th:action="@{/home}"  method="get">
     <input type="submit" value="Back" >
 </form>
-<a th:href="@{/reset-password}">Forgot password?</a>
+<a th:href="@{/home/login/reset-password}">Forgot password?</a>
 </body>
 </html>
 

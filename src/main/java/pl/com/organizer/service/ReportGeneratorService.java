@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,8 @@ public class ReportGeneratorService {
     private final UserRepository userRepository;
     private final SpringTemplateEngine springTemplateEngine;
 
-    public ReportGeneratorService(UserRepository userRepository, SpringTemplateEngine springTemplateEngine) {
+    public ReportGeneratorService(UserRepository userRepository,
+                                  SpringTemplateEngine springTemplateEngine) {
         this.userRepository = userRepository;
         this.springTemplateEngine = springTemplateEngine;
     }
@@ -75,8 +77,7 @@ public class ReportGeneratorService {
     }
 
     private List<Spending> filteredListWithData(String username, LocalDate fromDate, LocalDate toDate, ForWhatEnum forWhatEnum) {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        User user = getUserByEmail(username);
         List<Spending> listWithAllSpending = user.getSpending();
 
         return filterList(listWithAllSpending, fromDate, toDate, forWhatEnum);
@@ -89,7 +90,13 @@ public class ReportGeneratorService {
         return listWithAllSpending.stream()
                 .filter(spending -> filterListByDate(spending, fromDate, toDate))
                 .filter(spending -> filterListBySpendingType(spending, forWhatEnum))
+                .sorted(Comparator.comparing(Spending::getDate))
                 .collect(Collectors.toList());
+    }
+
+    private User getUserByEmail (String username){
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
     private boolean filterListByDate(Spending spending,

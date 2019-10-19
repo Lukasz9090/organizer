@@ -25,15 +25,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String [] publicAddresses = {
             "/",
-            "/login",
-            "/register",
-            "/register/***",
-            "/added-user",
-            "/confirm-account***",
-            "/remind-password***",
-            "/reset***",
-            "/set-new-password***",
-            "/new-password***"
+            "/home",
+            "/home/***",
+            "/home/login/***"
     };
 
     @Override
@@ -45,15 +39,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginPage("/login")
+                .loginPage("/home/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/logged")
-                .failureUrl("/login?error=true")
+                .defaultSuccessUrl("/user")
+                .failureUrl("/home/login?error=true")
                 .permitAll()
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/home")
                 .permitAll();
     }
 }

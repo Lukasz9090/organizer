@@ -29,7 +29,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UserNotFoundException("User not exist!"));
 
-        if (!user.getConfirmationNumber().equals("Confirmed")){
+        if (!user.getConfirmationNumber().equals("Account confirmed")){
             throw new UnconfirmedAccountException("You have to confirm your email address before continuing");
         }
 
