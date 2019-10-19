@@ -10,14 +10,16 @@ import pl.com.organizer.repository.UserRepository;
 public class SpendingService {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public SpendingService(UserRepository userRepository) {
+    public SpendingService(UserRepository userRepository,
+                           UserService userService) {
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public void addSpendingToUser(String username, Spending spending) {
-        User userToAddSpending = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User with email: " + username + " was not found."));
+        User userToAddSpending = userService.getUserByUsername(username);
         userToAddSpending.getSpending().add(spending);
         userRepository.save(userToAddSpending);
     }

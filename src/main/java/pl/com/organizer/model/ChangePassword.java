@@ -5,7 +5,7 @@ import pl.com.organizer.validator.FieldMatch;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@FieldMatch(first = "newPassword", second = "confirmNewPassword")
+@FieldMatch(first = "newPassword", second = "confirmNewPassword", message = "The passwords are different.")
 public class ChangePassword {
 
     private String oldPassword;

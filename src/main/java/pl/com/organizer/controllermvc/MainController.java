@@ -8,6 +8,7 @@ import pl.com.organizer.exception.UserExistException;
 import pl.com.organizer.exception.UserNotFoundException;
 import pl.com.organizer.model.ChangePassword;
 import pl.com.organizer.model.User;
+import pl.com.organizer.service.MainService;
 import pl.com.organizer.service.UserService;
 
 import javax.validation.Valid;
@@ -15,9 +16,12 @@ import javax.validation.Valid;
 @Controller
 public class MainController {
 
+    private final MainService mainService;
     private final UserService userService;
 
-    public MainController(UserService userService) {
+    public MainController(MainService mainService,
+                          UserService userService) {
+        this.mainService = mainService;
         this.userService = userService;
     }
 
@@ -45,7 +49,7 @@ public class MainController {
     public String resetAccountPasswordWriteEmail(@RequestParam String emailAddress,
                                 Model model) {
         try {
-            userService.sendEmailToResetPassword(emailAddress);
+            mainService.sendEmailToResetPassword(emailAddress);
             model.addAttribute("message", "Check your mailbox to continue reset password process.");
             return "default-success-page";
         } catch (UserNotFoundException e) {
@@ -72,7 +76,7 @@ public class MainController {
             return "reset-password-page-write-new-password";
         }
         try {
-            User user = userService.findUserByResetPasswordNumber(numberToCreateNewPassword);
+            User user = mainService.findUserByResetPasswordNumber(numberToCreateNewPassword);
             userService.changePassword(user.getEmail(), changePassword.getNewPassword());
             model.addAttribute("message", "Password reset with success. You can sign in now.");
             return "default-success-page";
@@ -97,7 +101,7 @@ public class MainController {
             return "register-page";
         }
         try {
-            userService.createUser(user);
+            mainService.createNewUser(user);
             model.addAttribute("message", "Check your mailbox and confirm your account.");
             return "default-success-page";
         } catch (UserExistException e) {

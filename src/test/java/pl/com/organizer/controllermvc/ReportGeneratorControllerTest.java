@@ -17,6 +17,7 @@ import pl.com.organizer.model.ReportSettings;
 import pl.com.organizer.model.Spending;
 import pl.com.organizer.model.User;
 import pl.com.organizer.repository.UserRepository;
+import pl.com.organizer.service.MainService;
 import pl.com.organizer.service.UserService;
 
 import java.net.URI;
@@ -46,6 +47,9 @@ class ReportGeneratorControllerTest {
     private UserService userService;
 
     @Autowired
+    private MainService mainService;
+
+    @Autowired
     TestRestTemplate testRestTemplate;
 
     @LocalServerPort
@@ -68,7 +72,7 @@ class ReportGeneratorControllerTest {
             correctUserForReport.setConfirmPassword("testPassword");
             correctUserForReport.setSpending(List.of(spending));
 
-            userService.createUser(correctUserForReport);
+            mainService.createNewUser(correctUserForReport);
         }
     }
 
