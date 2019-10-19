@@ -18,7 +18,7 @@ public class ConfirmService {
         User userToConfirmEmail = getUserByConfirmationNumber(confirmationNumber);
 
         userToConfirmEmail.setEmailAddressConfirmationStatus(true);
-        userToConfirmEmail.setConfirmationNumber("Account confirmed.");
+        userToConfirmEmail.setConfirmationNumber("Account confirmed");
         userRepository.save(userToConfirmEmail);
     }
 

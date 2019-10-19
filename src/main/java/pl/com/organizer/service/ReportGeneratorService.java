@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,6 +90,7 @@ public class ReportGeneratorService {
         return listWithAllSpending.stream()
                 .filter(spending -> filterListByDate(spending, fromDate, toDate))
                 .filter(spending -> filterListBySpendingType(spending, forWhatEnum))
+                .sorted(Comparator.comparing(Spending::getDate))
                 .collect(Collectors.toList());
     }
 
