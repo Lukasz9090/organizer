@@ -6,7 +6,8 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<p>[(${message})]</p>
+<header>BUDGET ORGANIZER</header>
+<p class="message">[(${message})]</p>
 <form th:action="@{/home}"  method="get">
     <input type="submit" value="Go to main page" >
 </form>

@@ -6,8 +6,9 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h1>Login page</h1>
-<p class="er" th:if="${param.error != null}">Incorrect login or password</p>
+<header>BUDGET ORGANIZER</header>
+<p class="message">SIGN IN</p>
+<p class="error-message" th:if="${param.error != null}">Incorrect login or password</p>
 <form th:action="@{/home/login}" method="post">
     <input type="email" name="email" placeholder="e-mail"> <br>
     <input type="password" name="password" placeholder="password"> <br>

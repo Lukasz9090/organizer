@@ -6,10 +6,10 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h3>ADD SPENDING</h3>
-
+<header>BUDGET ORGANIZER</header>
+<p class="message">ADD SPENDING</p>
 <form action="#" th:action="@{/user/add-spending}" th:object="${spending}" method="post">
-    <p class="er" th:errors="*{amount}"></p>
+    <p class="error-message" th:errors="*{amount}"></p>
     <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>
     <select th:field="*{forWhat}">
         <option th:value="FOOD" th:text="food"></option>
@@ -22,7 +22,7 @@
         <option th:value="RECREATION" th:text="recreation"></option>
         <option th:value="TRAVEL" th:text="travel"></option>
     </select><br>
-    <p class="er" th:errors="*{date}"></p>
+    <p class="error-message" th:errors="*{date}"></p>
     <input th:field="*{date}" type="date" /><br/>
     <input type="submit" value="Add">
 </form>

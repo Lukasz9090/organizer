@@ -1,6 +1,15 @@
 body{
     background: url("../images/money.jpg")
     no-repeat left top fixed;background-size: cover;
+    font: normal 13px/1.4em 'Farro', sans-serif;
+}
+
+header{
+    font-size: 25px;
+    padding: 10px 20px;
+    background-color: rgba(66,4,54,0.74);
+    color: white;
+    text-align: center;
 }
 
 input[type="submit"] {
@@ -11,6 +20,8 @@ input[type="submit"] {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    background-color: rgba(66,4,54,0.74);
+    color: white;
 }
 
 input[type="text"], input[type="email"], input[type="password"],  input[type="date"]{
@@ -21,6 +32,8 @@ input[type="text"], input[type="email"], input[type="password"],  input[type="da
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    background-color: white;
+    color: grey;
 }
 
 select {
@@ -33,7 +46,12 @@ select {
     border-radius: 5px;
 }
 
-p.er {
+p.error-message {
     font-size: 15px;
     color: red;
+}
+
+p.message{
+    font-size: 15px;
+    color: black;
 }

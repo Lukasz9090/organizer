@@ -20,7 +20,9 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public String loggedPage() {
+    public String loggedPage(Model model, Principal principal) {
+        String [] username = principal.getName().split("@");
+        model.addAttribute("username", username[0]);
         return "logged-main-page";
     }
 
