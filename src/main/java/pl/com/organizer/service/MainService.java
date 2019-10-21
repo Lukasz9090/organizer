@@ -31,11 +31,15 @@ public class MainService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void sendEmailToResetPassword(String username){
+    public void sendEmailToResetPassword(String username) {
         User userToResetPassword = getUserByUsername(username);
         userToResetPassword.setResetPasswordNumber(userToResetPassword.confirmationNumberGenerator());
-        emailService.send(username, "Budget organizer - reset password",
+
+        emailService.createEmailMessage(username,
+                "Budget organizer - link to reset password",
+                "email-message-reset-password-template",
                 "http://localhost:8080/home/set-new-password?id=" + userToResetPassword.getResetPasswordNumber());
+
         userRepository.save(userToResetPassword);
     }
 
@@ -44,9 +48,9 @@ public class MainService {
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found."));
     }
 
-    public User findUserByResetPasswordNumber(String confirmResetNumber){
+    public User findUserByResetPasswordNumber(String confirmResetNumber) {
         return userRepository.findByResetPasswordNumber(confirmResetNumber)
-                .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number. Please contact us."));
+                .orElseThrow(() -> new UserNotFoundException("Invalid confirmation number. Please contact us."));
     }
 
     public void createNewUser(User user) {
@@ -62,8 +66,9 @@ public class MainService {
 
         userRepository.save(user);
 
-        emailService.send(user.getEmail(), "Budget organizer account confirmation link",
+        emailService.createEmailMessage(user.getEmail(),
+                "Budget organizer - account confirmation link",
+                "email-message-confirm-account-template",
                 "http://localhost:8080/home/confirm-account?id=" + user.getConfirmationNumber());
     }
-
 }
