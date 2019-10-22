@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import pl.com.organizer.enums.ForWhatEnum;
-import pl.com.organizer.model.Spending;
+import pl.com.organizer.model.Expense;
 import pl.com.organizer.model.User;
 import pl.com.organizer.exception.IncorrectDateException;
 import pl.com.organizer.exception.UserNotFoundException;
@@ -62,7 +62,7 @@ public class ReportGeneratorService {
 
     private Context addDataToPdfFile(String username, LocalDate fromDate, LocalDate toDate, ForWhatEnum forWhatEnum) {
         Context ctx = new Context();
-        List<Spending> filteredList = filteredListWithData(username, fromDate, toDate, forWhatEnum);
+        List<Expense> filteredList = filteredListWithData(username, fromDate, toDate, forWhatEnum);
         BigDecimal amountSum = calculateSumOfAmount(filteredList);
         LocalDate firstDateInListWithFilteredData = getFirstDate(filteredList);
         LocalDate lastDateInListWithFilteredData = getLastDate(filteredList);
@@ -76,21 +76,21 @@ public class ReportGeneratorService {
         return ctx;
     }
 
-    private List<Spending> filteredListWithData(String username, LocalDate fromDate, LocalDate toDate, ForWhatEnum forWhatEnum) {
+    private List<Expense> filteredListWithData(String username, LocalDate fromDate, LocalDate toDate, ForWhatEnum forWhatEnum) {
         User user = getUserByEmail(username);
-        List<Spending> listWithAllSpending = user.getSpending();
+        List<Expense> listWithAllSpending = user.getExpenses();
 
         return filterList(listWithAllSpending, fromDate, toDate, forWhatEnum);
     }
 
-    private List<Spending> filterList(List<Spending> listWithAllSpending,
-                                      LocalDate fromDate,
-                                      LocalDate toDate,
-                                      ForWhatEnum forWhatEnum) {
+    private List<Expense> filterList(List<Expense> listWithAllSpending,
+                                     LocalDate fromDate,
+                                     LocalDate toDate,
+                                     ForWhatEnum forWhatEnum) {
         return listWithAllSpending.stream()
-                .filter(spending -> filterListByDate(spending, fromDate, toDate))
-                .filter(spending -> filterListBySpendingType(spending, forWhatEnum))
-                .sorted(Comparator.comparing(Spending::getDate))
+                .filter(expense -> filterListByDate(expense, fromDate, toDate))
+                .filter(expense -> filterListByExpenseType(expense, forWhatEnum))
+                .sorted(Comparator.comparing(Expense::getDate))
                 .collect(Collectors.toList());
     }
 
@@ -99,7 +99,7 @@ public class ReportGeneratorService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    private boolean filterListByDate(Spending spending,
+    private boolean filterListByDate(Expense spending,
                                      LocalDate fromDate,
                                      LocalDate toDate) {
         return (spending.getDate().equals(fromDate) ||
@@ -107,26 +107,26 @@ public class ReportGeneratorService {
                 spending.getDate().equals(toDate));
     }
 
-    private boolean filterListBySpendingType(Spending spending, ForWhatEnum forWhat) {
-        return forWhat == ForWhatEnum.ALL || (spending.getForWhat() == forWhat);
+    private boolean filterListByExpenseType(Expense expense, ForWhatEnum forWhat) {
+        return forWhat == ForWhatEnum.ALL || (expense.getForWhat() == forWhat);
     }
 
-    private BigDecimal calculateSumOfAmount(List<Spending> filteredList){
+    private BigDecimal calculateSumOfAmount(List<Expense> filteredList){
         BigDecimal sum = new BigDecimal("0");
-            for (Spending spending : filteredList){
-                sum = sum.add(new BigDecimal(spending.getAmount()));
+            for (Expense expense : filteredList){
+                sum = sum.add(new BigDecimal(expense.getAmount()));
             }
             return sum;
     }
 
-    private LocalDate getFirstDate(List<Spending> listWithFilteredData) {
+    private LocalDate getFirstDate(List<Expense> listWithFilteredData) {
         if (listWithFilteredData.isEmpty()) {
             throw new IncorrectDateException("You have selected the wrong dates");
         }
         return listWithFilteredData.get(0).getDate();
     }
 
-    private LocalDate getLastDate(List<Spending> listWithFilteredData) {
+    private LocalDate getLastDate(List<Expense> listWithFilteredData) {
         if (listWithFilteredData.isEmpty()) {
             throw new IncorrectDateException("You have selected the wrong dates");
         }

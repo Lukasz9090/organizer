@@ -8,8 +8,8 @@
 <body>
 <header>BUDGET ORGANIZER</header>
 <p class="message-header">ADD EXPENSE</p>
-<p class="help-message">Save new expense to your account. Enter amount, select type of expense and date.</p>
-<form action="#" th:action="@{/user/add-spending}" th:object="${spending}" method="post">
+<p class="help-message">Add new expense to your account. Enter amount, select type of expense and date.</p>
+<form action="#" th:action="@{/user/add-expense}" th:object="${expense}" method="post">
     <p class="error-message" th:errors="*{amount}"></p>
     <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>
     <select th:field="*{forWhat}">
