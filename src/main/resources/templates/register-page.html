@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registration page</title>
+    <title>Budget organizer</title>
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
 <header>BUDGET ORGANIZER</header>
-<p class="message">CREATE ACCOUNT</p>
+<p class="message-header">CREATE ACCOUNT</p>
 <form th:action="@{/home/register}" th:object="${user}"  method="post">
     <p class="error-message" th:errors="*{email}"></p>
     <input th:field="*{email}" type="email" placeholder="e-mail"/><br/>

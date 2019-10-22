@@ -2,12 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Budget organizer</title>
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
 <header>BUDGET ORGANIZER</header>
-<p class="message">ADD SPENDING</p>
+<p class="message-header">ADD EXPENSE</p>
+<p class="help-message">Save new expense to your account. Enter amount, select type of expense and date.</p>
 <form action="#" th:action="@{/user/add-spending}" th:object="${spending}" method="post">
     <p class="error-message" th:errors="*{amount}"></p>
     <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>

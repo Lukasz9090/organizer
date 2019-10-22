@@ -7,9 +7,9 @@
 </head>
 <body>
 <header>BUDGET ORGANIZER</header>
-<p class="message">HELLO [(${username})]</p>
+<p class="message-header">HELLO [(${username})]</p>
 <form th:action="@{/user/add-spending}" method="get">
-    <input type="submit" value="Add new spending" >
+    <input type="submit" value="Add new expense" >
 </form>
 <form th:action="@{/user/report}" method="get">
     <input type="submit" value="Create report" >

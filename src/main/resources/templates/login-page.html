@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
-    <title>Login page</title>
+    <title>Budget organizer</title>
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
 <header>BUDGET ORGANIZER</header>
-<p class="message">SIGN IN</p>
+<p class="message-header">SIGN IN</p>
 <p class="error-message" th:if="${param.error != null}">Incorrect login or password</p>
 <form th:action="@{/home/login}" method="post">
     <input type="email" name="email" placeholder="e-mail"> <br>

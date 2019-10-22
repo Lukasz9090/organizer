@@ -25,7 +25,7 @@ public class SpendingController {
     public String addSpending(Model model) {
         Spending spending = new Spending();
         model.addAttribute(spending);
-        return "add-spending-page";
+        return "add-expenses-page";
     }
 
     @PostMapping("/user/add-spending")
@@ -33,7 +33,7 @@ public class SpendingController {
                               BindingResult result,
                               Principal principal) {
         if (result.hasErrors()) {
-            return "add-spending-page";
+            return "add-expenses-page";
         }
         spendingService.addSpendingToUser(principal.getName(), spending);
         return "redirect:/user/add-spending";

@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Success</title>
+    <title>Budget organizer</title>
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
 <header>BUDGET ORGANIZER</header>
-<p class="message">[(${message})]</p>
+<p class="help-message">[(${message})]</p>
 <form th:action="@{/home}"  method="get">
     <input type="submit" value="Go to main page" >
 </form>
