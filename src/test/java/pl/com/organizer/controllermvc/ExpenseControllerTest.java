@@ -9,7 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.com.organizer.enums.ForWhatEnum;
-import pl.com.organizer.model.Spending;
+import pl.com.organizer.model.Expense;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -19,12 +19,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
-class SpendingControllerTest {
+class ExpenseControllerTest {
 
     private MockMvc mockMvc;
 
     @Autowired
-    SpendingController spendingController;
+    ExpenseController expenseController;
 
     private Principal principal = new Principal() {
         @Override
@@ -35,72 +35,72 @@ class SpendingControllerTest {
 
     @BeforeEach
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(spendingController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(expenseController).build();
     }
 
     @Test
-    public void testAddSpendingPage() throws Exception {
-        this.mockMvc.perform(get("/user/add-spending"))
+    public void testAddExpensePage() throws Exception {
+        this.mockMvc.perform(get("/user/add-expense"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("add-spending-page"));
+                .andExpect(view().name("add-expenses-page"));
     }
 
     @Test
-    public void testAddSpendingCorrect() throws Exception {
-        Spending newSpending = createCorrectSpending();
+    public void testAddExpenseCorrect() throws Exception {
+        Expense newExpense = createCorrectExpense();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
-                        .postForm("/user/add-spending", newSpending)
+                        .postForm("/user/add-expense", newExpense)
                         .principal(principal))
                 .andExpect(MockMvcResultMatchers.model().hasNoErrors())//.andDo(print())
-                .andExpect(redirectedUrl("/user/add-spending"));
+                .andExpect(redirectedUrl("/user/add-expense"));
     }
 
     @Test
-    public void testAddSpendingWithErrorWithoutAmount() throws Exception {
-        Spending newSpending = createSpendingWithoutAmount();
+    public void testAddExpenseWithErrorWithoutAmount() throws Exception {
+        Expense newExpense = createExpenseWithoutAmount();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
-                        .postForm("/user/add-spending", newSpending)
+                        .postForm("/user/add-expense", newExpense)
                         .principal(principal))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("add-spending-page"));
+                .andExpect(view().name("add-expenses-page"));
     }
 
     @Test
-    public void testAddSpendingWithErrorWithoutDate() throws Exception {
-        Spending newSpending = createSpendingWithoutDate();
+    public void testAddExpenseWithErrorWithoutDate() throws Exception {
+        Expense newExpense = createExpenseWithoutDate();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
-                        .postForm("/user/add-spending", newSpending)
+                        .postForm("/user/add-expense", newExpense)
                         .principal(principal))
                 .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("add-spending-page"));
+                .andExpect(view().name("add-expenses-page"));
     }
 
-    private Spending createCorrectSpending() {
-        Spending spending = new Spending();
-        spending.setAmount("150.20");
-        spending.setForWhat(ForWhatEnum.CLOTHES);
-        spending.setDate(LocalDate.now());
-        return spending;
+    private Expense createCorrectExpense() {
+        Expense expense = new Expense();
+        expense.setAmount("150.20");
+        expense.setForWhat(ForWhatEnum.CLOTHES);
+        expense.setDate(LocalDate.now());
+        return expense;
     }
 
-    private Spending createSpendingWithoutAmount() {
-        Spending spending = new Spending();
-        spending.setAmount("");
-        spending.setForWhat(ForWhatEnum.CLOTHES);
-        spending.setDate(LocalDate.now());
-        return spending;
+    private Expense createExpenseWithoutAmount() {
+        Expense expense = new Expense();
+        expense.setAmount("");
+        expense.setForWhat(ForWhatEnum.CLOTHES);
+        expense.setDate(LocalDate.now());
+        return expense;
     }
 
-    private Spending createSpendingWithoutDate() {
-        Spending spending = new Spending();
-        spending.setAmount("150.80");
-        spending.setForWhat(ForWhatEnum.CLOTHES);
-        return spending;
+    private Expense createExpenseWithoutDate() {
+        Expense expense = new Expense();
+        expense.setAmount("150.80");
+        expense.setForWhat(ForWhatEnum.CLOTHES);
+        return expense;
     }
 }

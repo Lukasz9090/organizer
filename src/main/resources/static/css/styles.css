@@ -1,30 +1,43 @@
 body{
     background: url("../images/money.jpg")
     no-repeat left top fixed;background-size: cover;
+    font: normal 13px/1.4em 'Farro', sans-serif;
+}
+
+header{
+    font-size: 25px;
+    padding: 10px 20px;
+    background-color: #420436;
+    color: white;
+    text-align: center;
 }
 
 input[type="submit"] {
-    width: 200px;
+    width: 250px;
     padding: 10px 0;
     margin: 5px 0;
     box-sizing: border-box;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    background-color: #420436;
+    color: white;
 }
 
 input[type="text"], input[type="email"], input[type="password"],  input[type="date"]{
-    width: 200px;
+    width: 250px;
     padding: 10px 0;
     margin: 5px 0;
     box-sizing: border-box;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    background-color: white;
+    color: grey;
 }
 
 select {
-    width: 200px;
+    width: 250px;
     padding: 10px 0;
     margin: 5px 0;
     box-sizing: border-box;
@@ -33,7 +46,27 @@ select {
     border-radius: 5px;
 }
 
-p.er {
-    font-size: 15px;
-    color: red;
+p.help-message {
+    font-size: 12px;
+    color: black;
+    width: 250px;
+    text-align: center;
 }
+
+p.error-message {
+    font-size: 12px;
+    color: red;
+    width: 250px;
+    text-align: center;
+}
+
+p.message-header{
+    font-size: 15px;
+    padding: 5px 0;
+    background-color: #420436;
+    color: white;
+    width: 250px;
+    text-align: center;
+
+}
+

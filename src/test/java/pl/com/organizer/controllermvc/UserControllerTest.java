@@ -21,7 +21,8 @@ public class UserControllerTest {
 
     private MockMvc mockMvc;
 
-    @Autowired UserController userController;
+    @Autowired
+    UserController userController;
 
     private Principal principal = new Principal() {
         @Override
@@ -37,7 +38,8 @@ public class UserControllerTest {
 
     @Test
     public void testLogin() throws Exception {
-        this.mockMvc.perform(get("/user"))
+        this.mockMvc.perform(get("/user")
+                .principal(principal))
                 .andExpect(status().isOk())
                 .andExpect(view().name("logged-main-page"));
     }

@@ -2,17 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registration page</title>
+    <title>Budget organizer</title>
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h3>REGISTRATION</h3>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">CREATE ACCOUNT</p>
 <form th:action="@{/home/register}" th:object="${user}"  method="post">
-    <p class="er" th:errors="*{email}"></p>
+    <p class="error-message" th:errors="*{email}"></p>
     <input th:field="*{email}" type="email" placeholder="e-mail"/><br/>
-    <p class="er" th:errors="*{password}"></p>
+    <p class="error-message" th:errors="*{password}"></p>
     <input th:field="*{password}" type="password" placeholder="password"/><br/>
-    <p class="er" th:errors="*{confirmPassword}"></p>
+    <p class="error-message" th:errors="*{confirmPassword}"></p>
     <input th:field="*{confirmPassword}" type="password" placeholder="confirm password"/><br/>
     <input type="submit" value="Register">
 </form>

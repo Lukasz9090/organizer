@@ -6,9 +6,10 @@
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h3>YOUR PAGE</h3>
-<form th:action="@{/user/add-spending}" method="get">
-    <input type="submit" value="Add new spending" >
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">HELLO [(${username})]</p>
+<form th:action="@{/user/add-expense}" method="get">
+    <input type="submit" value="Add new expense" >
 </form>
 <form th:action="@{/user/report}" method="get">
     <input type="submit" value="Create report" >

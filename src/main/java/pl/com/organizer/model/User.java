@@ -38,7 +38,7 @@ public class User {
     @DBRef
     private Set<Role> role;
 
-    private List<Spending> spending = new ArrayList<>();
+    private List<Expense> expenses = new ArrayList<>();
 
     private boolean emailAddressConfirmationStatus;
 
@@ -89,12 +89,12 @@ public class User {
         this.role = role;
     }
 
-    public List<Spending> getSpending() {
-        return spending;
+    public List<Expense> getExpenses() {
+        return expenses;
     }
 
-    public void setSpending(List<Spending> spending) {
-        this.spending = spending;
+    public void setExpenses(List<Expense> expenses) {
+        this.expenses = expenses;
     }
 
     public boolean isEmailAddressConfirmationStatus() {

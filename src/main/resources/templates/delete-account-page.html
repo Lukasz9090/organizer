@@ -2,13 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Delete page</title>
+    <title>Budget organizer</title>
     <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
 </head>
 <body>
-<h3>Enter your password to delete account</h3>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">DELETE ACCOUNT</p>
+<p class="help-message">Enter your current password to delete account.</p>
 <form th:action="@{/user/delete-account}"  th:method="delete">
-    <p class="er" th:if="${errorMessage != null}">Incorrect password</p>
+    <p class="error-message" th:if="${errorMessage != null}">Incorrect password</p>
     <input type="password" name="passwordToCheck" placeholder="password"/><br/>
     <input type="submit" value="Confirm deletion" >
 </form>

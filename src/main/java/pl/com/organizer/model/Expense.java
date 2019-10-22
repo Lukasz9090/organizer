@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Spending {
+public class Expense {
 
     @DecimalMin(value = "0", message = "Amount should be greater than 0")
     @NotNull(message = "Please enter the amount")
@@ -25,10 +25,10 @@ public class Spending {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
 
-    public Spending() {
+    public Expense() {
     }
 
-    public Spending(String amount, ForWhatEnum forWhat, LocalDate date) {
+    public Expense(String amount, ForWhatEnum forWhat, LocalDate date) {
         this.amount = amount;
         this.forWhat = forWhat;
         this.date = date;
@@ -60,7 +60,7 @@ public class Spending {
 
     @Override
     public String toString() {
-        return "Spending{" +
+        return "Expense{" +
                 "amount=" + amount +
                 ", forWhat=" + forWhat +
                 ", date=" + date +
@@ -71,7 +71,7 @@ public class Spending {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Spending spending = (Spending) o;
+        Expense spending = (Expense) o;
         return Objects.equals(date, spending.date);
     }
 
