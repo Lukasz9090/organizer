@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>BUDGET REPORT</title>
+    <title>EXPENSE REPORT</title>
     <style>
         html, body, div {
             margin: 0;
@@ -36,20 +36,20 @@
         }
 
         th {
-            background-color: #8b8b8b;
+            background-color: #987085;
             color: black;
-            font-weight: lighter;
+            font-weight: bold;
         }
 
         #container {
             font: normal 13px/1.4em 'Farro', sans-serif;
             margin: 0 auto;
-            padding: 50px 40px;
+            padding: 30px 20px;
         }
 
         .document-header-title {
             background-color: #420436;
-            background-size: 80px auto;
+            background-size: 50px auto;
             padding: 10px 20px;
             position: relative;
             margin-bottom: 15px;
@@ -57,7 +57,7 @@
 
         .document-header-title span {
             color: white;
-            font-size: 30px;
+            font-size: 20px;
             font-weight: bold;
             line-height: 1em;
         }
@@ -74,22 +74,20 @@
         .document-header-date span {
             color: white;
             font-size: 15px;
-            font-weight: bold;
             line-height: 1em;
         }
 
         .print-info-total {
+            background-color: #987085;
+            padding: 5px 0;
             font-size: 14px;
             color: black;
-            text-align: right;
-            padding: 10px 0;
-        }
-
-        .print-info {
-            font-size: 12px;
-            color: #8b8b8b;
-            text-align: right;
-            padding: 10px 0;
+            font-weight: normal;
+            position: absolute;
+            right: 20px;
+            width: 45%;
+            text-align: center;
+            margin-top: 15px;
         }
 
         @font-face {
@@ -112,7 +110,7 @@
 <div id="container">
     <section>
         <div class="document-header-title">
-            <span>BUDGET REPORT - </span>
+            <span>EXPENSES REPORT - </span>
             <span>[(${forWhat})]</span>
         </div>
         <div class="document-header-date">
@@ -136,11 +134,10 @@
                 <td width="30%">[(${element.amount})]</td>
             </tr>
         </table>
+    </section>
+    <section>
         <div class="print-info-total">
-            <div>Total : [(${sum})]</div>
-        </div>
-        <div class="print-info">
-            <div>Date created : [(${currentDate})]</div>
+            <div>Total expenses amount : <strong>[(${sum})] pln</strong></div>
         </div>
     </section>
 </div>
