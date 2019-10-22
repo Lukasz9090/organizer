@@ -7,7 +7,7 @@ body{
 header{
     font-size: 25px;
     padding: 10px 20px;
-    background-color: rgba(66,4,54,0.74);
+    background-color: #420436;
     color: white;
     text-align: center;
 }
@@ -20,7 +20,7 @@ input[type="submit"] {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    background-color: rgba(66,4,54,0.74);
+    background-color: #420436;
     color: white;
 }
 
@@ -63,7 +63,7 @@ p.error-message {
 p.message-header{
     font-size: 15px;
     padding: 5px 0;
-    background-color: rgba(66,4,54,0.74);
+    background-color: #420436;
     color: white;
     width: 250px;
     text-align: center;
