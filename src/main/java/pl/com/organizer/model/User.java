@@ -49,6 +49,14 @@ public class User {
     public User() {
     }
 
+    public User(String email,
+                String password,
+                String confirmPassword) {
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+    }
+
     public String getId() {
         return id;
     }
