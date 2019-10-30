@@ -27,7 +27,7 @@ public class ConfirmControllerTest {
     private MainController mainController;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @BeforeEach
     void setup() {

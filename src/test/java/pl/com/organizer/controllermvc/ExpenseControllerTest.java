@@ -2,6 +2,7 @@ package pl.com.organizer.controllermvc;
 
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,13 +19,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Tag("integration_test")
 @SpringBootTest
 class ExpenseControllerTest {
 
     private MockMvc mockMvc;
 
     @Autowired
-    ExpenseController expenseController;
+    private ExpenseController expenseController;
 
     private Principal principal = new Principal() {
         @Override
@@ -34,19 +36,19 @@ class ExpenseControllerTest {
     };
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(expenseController).build();
     }
 
     @Test
-    public void testAddExpensePage() throws Exception {
+    void shouldReturnAddExpensesPage() throws Exception {
         this.mockMvc.perform(get("/user/add-expense"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("add-expenses-page"));
     }
 
     @Test
-    public void testAddExpenseCorrect() throws Exception {
+    void shouldCorrectlyAddExpenseThenRedirectToAddExpensePage() throws Exception {
         Expense newExpense = createCorrectExpense();
 
         this.mockMvc
@@ -58,7 +60,7 @@ class ExpenseControllerTest {
     }
 
     @Test
-    public void testAddExpenseWithErrorWithoutAmount() throws Exception {
+    void shouldNotAddExpenseAndReturnPageWithErrorMessage_ExpenseWithoutAmount() throws Exception {
         Expense newExpense = createExpenseWithoutAmount();
 
         this.mockMvc
@@ -70,7 +72,7 @@ class ExpenseControllerTest {
     }
 
     @Test
-    public void testAddExpenseWithErrorWithoutDate() throws Exception {
+    void shouldNotAddExpenseAndReturnPageWithErrorMessage_ExpenseWithoutDate() throws Exception {
         Expense newExpense = createExpenseWithoutDate();
 
         this.mockMvc
