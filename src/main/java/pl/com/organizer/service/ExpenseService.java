@@ -6,6 +6,7 @@ import pl.com.organizer.model.User;
 import pl.com.organizer.repository.UserRepository;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 @Service
 public class ExpenseService {
@@ -22,27 +23,29 @@ public class ExpenseService {
     public void addExpenseToUser(String username, Expense expense) {
         User userToAddExpense = userService.getUserByUsername(username);
         Expense expenseWithCorrectAmountFormat = checkingAmountFormat(expense);
-        userToAddExpense.getExpenses().add(expenseWithCorrectAmountFormat);
+        addExpense(userToAddExpense, expenseWithCorrectAmountFormat);
         userRepository.save(userToAddExpense);
     }
 
-    private Expense checkingAmountFormat (Expense expense){
-        if (expense.getAmount().contains(".")){
-            String [] splitAmount = expense.getAmount().split("\\.");
-            switch (splitAmount[1].length()){
-                case 0:
-                    expense.setAmount(expense.getAmount() + "00");
-                    break;
-                case 1:
-                    expense.setAmount(expense.getAmount() + "0");
-                    break;
-                case 2:
-                    break;
-            }
-        } else {
-            String correctAmount = expense.getAmount() + ".00";
-            expense.setAmount(correctAmount);
+    Expense checkingAmountFormat(Expense expense){
+        String amount = expense.getAmount();
+
+        if (amount.matches("-?[0-9]{1,6}\\.[0-9]")) {
+            expense.setAmount(expense.getAmount() + "0");
+            return expense;
+        }
+        else if (amount.matches("-?[0-9]{1,6}\\.")){
+            expense.setAmount(expense.getAmount() + "00");
+            return expense;
+        }
+        else if (amount.matches("-?[0-9]{1,6}")){
+            expense.setAmount(expense.getAmount() + ".00");
+            return expense;
         }
         return expense;
+    }
+
+    void addExpense (User user, Expense expense){
+        user.getExpenses().add(expense);
     }
 }
