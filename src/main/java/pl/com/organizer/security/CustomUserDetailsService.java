@@ -26,10 +26,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UserNotFoundException("User not exist!"));
+        User user = getUserByUsername(username);
 
-        if (!user.isEmailAddressConfirmationStatus()){
+        if (!user.isActive()){
             throw new UnconfirmedAccountException("You have to confirm your email address before continuing");
         }
 
@@ -38,6 +37,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getPassword(),
                 convertAuthorities(user.getRole())
         );
+    }
+
+    private User getUserByUsername(String username){
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserNotFoundException("User not exist!"));
     }
 
     private Set<GrantedAuthority> convertAuthorities(Set <Role> userRoles){

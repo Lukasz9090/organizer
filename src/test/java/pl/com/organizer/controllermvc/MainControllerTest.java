@@ -72,7 +72,7 @@ class MainControllerTest {
     @Test
     void shouldReturnResetPasswordViewWhenURLIsCalled() throws Exception {
         this.mockMvc.perform(get("/home/login/reset-password"))
-                .andExpect(status().isOk())//.andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(view().name("reset-password-page-write-email"));
     }
 
@@ -80,7 +80,7 @@ class MainControllerTest {
     void shouldReturnResetPasswordViewWhenResetPasswordNumberIsCorrect() throws Exception {
         createUserToUseInPasswordReset("testUserToResetPassword@mail.com");
         this.mockMvc.perform(get("/home/set-new-password?id=2"))
-                .andExpect(status().isOk()).andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(view().name("reset-password-page-write-new-password"));
     }
 

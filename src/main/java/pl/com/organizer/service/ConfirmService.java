@@ -25,7 +25,7 @@ public class ConfirmService {
     }
 
     User confirmAccount (User user){
-        user.setEmailAddressConfirmationStatus(true);
+        user.setActive(true);
         user.setConfirmationNumber("Account confirmed");
         return user;
     }

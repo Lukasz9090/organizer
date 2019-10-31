@@ -54,7 +54,7 @@ class ConfirmServiceTest {
         User user = new User("123@mail.com", "123123", "123123");
 
         //then
-        assertThat(user.isEmailAddressConfirmationStatus(), is(false));
+        assertThat(user.isActive(), is(false));
     }
 
     @Test
@@ -68,7 +68,7 @@ class ConfirmServiceTest {
 
         //then
         assertAll(
-                () -> assertThat(user.isEmailAddressConfirmationStatus(), is(true)),
+                () -> assertThat(user.isActive(), is(true)),
                 () -> assertThat(user.getConfirmationNumber(), equalTo("Account confirmed"))
         );
     }
