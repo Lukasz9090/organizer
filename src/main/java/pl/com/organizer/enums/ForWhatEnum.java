@@ -14,8 +14,4 @@ public enum ForWhatEnum {
     ForWhatEnum(String description) {
         this.description = description;
     }
-
-    public String getDescription() {
-        return description;
-    }
 }

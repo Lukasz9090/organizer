@@ -17,6 +17,17 @@ public class ChangePassword {
     @NotNull(message = "Please confirm your password")
     private String confirmNewPassword;
 
+    public ChangePassword() {
+    }
+
+    public ChangePassword(String oldPassword,
+                          String newPassword,
+                          String confirmNewPassword) {
+        this.oldPassword = oldPassword;
+        this.newPassword = newPassword;
+        this.confirmNewPassword = confirmNewPassword;
+    }
+
     public String getOldPassword() {
         return oldPassword;
     }

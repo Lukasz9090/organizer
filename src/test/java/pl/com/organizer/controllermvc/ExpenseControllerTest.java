@@ -74,7 +74,7 @@ class ExpenseControllerTest {
                 LocalDate.now());
     }
 
-    void createCorrectUserAndSaveToDB(String username) throws Exception {
+    private void createCorrectUserAndSaveToDB(String username) throws Exception {
         if (!isUserExist(username)){
             User user = new User(username, "pass123", "pass123");
             MockMvcBuilders.standaloneSetup(mainController).build()
@@ -83,7 +83,7 @@ class ExpenseControllerTest {
         }
     }
 
-    boolean isUserExist(String username){
+    private boolean isUserExist(String username){
         return userRepository.findByEmail(username).isPresent();
     }
 

@@ -1,6 +1,7 @@
 package pl.com.organizer.controllermvc;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,14 +32,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@Tag("integration_test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 class ReportGeneratorControllerTest {
 
     private MockMvc mockMvc;
 
     @Autowired
-    ReportGeneratorController reportGeneratorController;
+    private ReportGeneratorController reportGeneratorController;
 
     @Autowired
     private UserRepository userRepository;
@@ -47,10 +48,10 @@ class ReportGeneratorControllerTest {
     private MainService mainService;
 
     @Autowired
-    TestRestTemplate testRestTemplate;
+    private TestRestTemplate testRestTemplate;
 
     @LocalServerPort
-    int randomServerPort;
+    private int randomServerPort;
 
     @BeforeEach
     public void setup() {

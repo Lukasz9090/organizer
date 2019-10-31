@@ -3,6 +3,7 @@ package pl.com.organizer.controllermvc;
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.com.organizer.model.ChangePassword;
+import pl.com.organizer.model.User;
+import pl.com.organizer.repository.UserRepository;
 
 import java.security.Principal;
 
@@ -17,38 +20,60 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+@Tag("integration_test")
 @SpringBootTest
-@Disabled
-public class UserControllerTest {
+class UserControllerTest {
 
     private MockMvc mockMvc;
 
     @Autowired
-    UserController userController;
+    private UserController userController;
 
+    @Autowired
+    private MainController mainController;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private String username = "testUser@main.com";
 
     private Principal principal = new Principal() {
         @Override
         public String getName() {
-            return "test@mail.com";
+            return username;
         }
     };
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
     }
 
     @Test
-    public void testLogin() throws Exception {
+    void shouldReturnLoggedMainViewWhenURLIsCalled() throws Exception {
+        createCorrectUserAndSaveToDB(username);
+
         this.mockMvc.perform(get("/user")
                 .principal(principal))
                 .andExpect(status().isOk())
                 .andExpect(view().name("logged-main-page"));
     }
 
+    private void createCorrectUserAndSaveToDB(String username) throws Exception {
+        if (!isUserExist(username)){
+            User user = new User(username, "testPassword", "testPassword");
+            MockMvcBuilders.standaloneSetup(mainController).build()
+                    .perform(MockMvcRequestBuilderUtils
+                            .postForm("/home/register", user));
+        }
+    }
+
+    private boolean isUserExist(String username){
+        return userRepository.findByEmail(username).isPresent();
+    }
+
     @Test
-    public void testChangePasswordPage() throws Exception {
+    void shouldReturnChangePasswordViewWhenURLIsCalled() throws Exception {
         this.mockMvc
                 .perform(get("/user/change-password"))
                 .andExpect(status().isOk())
@@ -56,8 +81,9 @@ public class UserControllerTest {
     }
 
     @Test
-    void testChangePasswordSuccess() throws Exception {
-        ChangePassword changePassword = correctChangePassword();
+    void shouldReturnSuccessChangeViewWhenOldPasswordAndNewPasswordsAreCorrect() throws Exception {
+        createCorrectUserAndSaveToDB(username);
+        ChangePassword changePassword = new ChangePassword("testPassword", "testPassword", "testPassword");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
@@ -68,17 +94,10 @@ public class UserControllerTest {
                 .andExpect(view().name("success-password-change-page"));
     }
 
-    ChangePassword correctChangePassword() {
-        ChangePassword changePassword = new ChangePassword();
-        changePassword.setOldPassword("testPassword");
-        changePassword.setNewPassword("testPassword2");
-        changePassword.setConfirmNewPassword("testPassword2");
-        return changePassword;
-    }
-
     @Test
-    void testChangePasswordWithErrorWhereOldPasswordIsIncorrect() throws Exception {
-        ChangePassword changePassword = incorrectChangePassword();
+    void shouldReturnChangePasswordViewWithErrorWhenOldPasswordIsNotCorrect() throws Exception {
+        createCorrectUserAndSaveToDB(username);
+        ChangePassword changePassword = new ChangePassword("testPassword10", "testPassword2", "testPassword2");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
@@ -89,17 +108,10 @@ public class UserControllerTest {
                 .andExpect(view().name("change-password-page"));
     }
 
-    ChangePassword incorrectChangePassword() {
-        ChangePassword changePassword = new ChangePassword();
-        changePassword.setOldPassword("testPassword15");
-        changePassword.setNewPassword("testPassword2");
-        changePassword.setConfirmNewPassword("testPassword2");
-        return changePassword;
-    }
-
     @Test
-    void testChangePasswordWithErrorWhereNewPasswordAndConfirmNewPasswordNotMatch() throws Exception {
-        ChangePassword changePassword = incorrectChangePasswordNotMatch();
+    void shouldReturnChangePasswordPageWithErrorWhenNewPasswordIsNotMatchToConfirmPassword() throws Exception {
+        createCorrectUserAndSaveToDB(username);
+        ChangePassword changePassword = new ChangePassword("testPassword", "testPassword2", "notConfirmedCorrectly");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
@@ -110,19 +122,10 @@ public class UserControllerTest {
                 .andExpect(view().name("change-password-page"));
     }
 
-    ChangePassword incorrectChangePasswordNotMatch() {
-        ChangePassword changePassword = new ChangePassword();
-        changePassword.setOldPassword("testPassword2");
-        changePassword.setNewPassword("testPassword2");
-        changePassword.setConfirmNewPassword("testPassword3");
-        return changePassword;
-    }
-
     @Test
-    public void testDeleteAccountPage() throws Exception {
+    void shouldReturnDeleteAccountViewWhenURLIsCalled() throws Exception {
         this.mockMvc.perform(get("/user/delete-account"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("delete-account-page"));
     }
-//    TODO - add deleteMethodTest
 }

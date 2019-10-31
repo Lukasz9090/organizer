@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Tag("integration_test")
 @SpringBootTest
-public class ConfirmControllerTest {
+class ConfirmControllerTest {
 
     private MockMvc mockMvc;
 
