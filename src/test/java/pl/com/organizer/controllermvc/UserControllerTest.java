@@ -2,6 +2,7 @@ package pl.com.organizer.controllermvc;
 
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +18,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
-
+@Disabled
 public class UserControllerTest {
 
     private MockMvc mockMvc;
 
     @Autowired
     UserController userController;
+
 
     private Principal principal = new Principal() {
         @Override
@@ -54,7 +56,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testChangePasswordSuccess() throws Exception {
+    void testChangePasswordSuccess() throws Exception {
         ChangePassword changePassword = correctChangePassword();
 
         this.mockMvc
@@ -66,7 +68,7 @@ public class UserControllerTest {
                 .andExpect(view().name("success-password-change-page"));
     }
 
-    public ChangePassword correctChangePassword() {
+    ChangePassword correctChangePassword() {
         ChangePassword changePassword = new ChangePassword();
         changePassword.setOldPassword("testPassword");
         changePassword.setNewPassword("testPassword2");
@@ -75,7 +77,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testChangePasswordWithErrorWhereOldPasswordIsIncorrect() throws Exception {
+    void testChangePasswordWithErrorWhereOldPasswordIsIncorrect() throws Exception {
         ChangePassword changePassword = incorrectChangePassword();
 
         this.mockMvc
@@ -87,7 +89,7 @@ public class UserControllerTest {
                 .andExpect(view().name("change-password-page"));
     }
 
-    public ChangePassword incorrectChangePassword() {
+    ChangePassword incorrectChangePassword() {
         ChangePassword changePassword = new ChangePassword();
         changePassword.setOldPassword("testPassword15");
         changePassword.setNewPassword("testPassword2");
@@ -96,7 +98,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void testChangePasswordWithErrorWhereNewPasswordAndConfirmNewPasswordNotMatch() throws Exception {
+    void testChangePasswordWithErrorWhereNewPasswordAndConfirmNewPasswordNotMatch() throws Exception {
         ChangePassword changePassword = incorrectChangePasswordNotMatch();
 
         this.mockMvc
@@ -108,7 +110,7 @@ public class UserControllerTest {
                 .andExpect(view().name("change-password-page"));
     }
 
-    public ChangePassword incorrectChangePasswordNotMatch() {
+    ChangePassword incorrectChangePasswordNotMatch() {
         ChangePassword changePassword = new ChangePassword();
         changePassword.setOldPassword("testPassword2");
         changePassword.setNewPassword("testPassword2");

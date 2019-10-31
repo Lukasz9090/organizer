@@ -42,7 +42,7 @@ public class ConfirmControllerTest {
     }
 
     @Test
-    void shouldReturnDefaultDefaultSuccessPageWhenConfirmAccountIdExist() throws Exception {
+    void shouldReturnDefaultSuccessPageWhenConfirmAccountIdExist() throws Exception {
         createUserToUseForConfirmAccount();
 
         this.mockMvc.perform(get("/home/confirm-account?id=2"))

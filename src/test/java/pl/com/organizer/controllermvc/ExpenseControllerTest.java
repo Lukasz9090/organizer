@@ -11,12 +11,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.com.organizer.enums.ForWhatEnum;
 import pl.com.organizer.model.Expense;
+import pl.com.organizer.model.User;
+import pl.com.organizer.repository.UserRepository;
 
 import java.security.Principal;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("integration_test")
@@ -28,10 +29,18 @@ class ExpenseControllerTest {
     @Autowired
     private ExpenseController expenseController;
 
+    @Autowired
+    private MainController mainController;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    private String username = "testUserAddExpense@mail.com";
+
     private Principal principal = new Principal() {
         @Override
         public String getName() {
-            return "test@mail.com";
+            return username;
         }
     };
 
@@ -41,68 +50,76 @@ class ExpenseControllerTest {
     }
 
     @Test
-    void shouldReturnAddExpensesPage() throws Exception {
+    void shouldReturnAddExpensesViewWhenURLIsCalled() throws Exception {
         this.mockMvc.perform(get("/user/add-expense"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("add-expenses-page"));
     }
 
     @Test
-    void shouldCorrectlyAddExpenseThenRedirectToAddExpensePage() throws Exception {
+    void shouldRedirectToAddExpenseURLWhenExpenseIsAddedCorrectly() throws Exception {
         Expense newExpense = createCorrectExpense();
-
+        createCorrectUserAndSaveToDB(username);
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/add-expense", newExpense)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())//.andDo(print())
+                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
                 .andExpect(redirectedUrl("/user/add-expense"));
     }
 
-    @Test
-    void shouldNotAddExpenseAndReturnPageWithErrorMessage_ExpenseWithoutAmount() throws Exception {
-        Expense newExpense = createExpenseWithoutAmount();
-
-        this.mockMvc
-                .perform(MockMvcRequestBuilderUtils
-                        .postForm("/user/add-expense", newExpense)
-                        .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("add-expenses-page"));
-    }
-
-    @Test
-    void shouldNotAddExpenseAndReturnPageWithErrorMessage_ExpenseWithoutDate() throws Exception {
-        Expense newExpense = createExpenseWithoutDate();
-
-        this.mockMvc
-                .perform(MockMvcRequestBuilderUtils
-                        .postForm("/user/add-expense", newExpense)
-                        .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("add-expenses-page"));
-    }
-
     private Expense createCorrectExpense() {
-        Expense expense = new Expense();
-        expense.setAmount("150.20");
-        expense.setForWhat(ForWhatEnum.CLOTHES);
-        expense.setDate(LocalDate.now());
-        return expense;
+        return new Expense("150.20",
+                ForWhatEnum.CLOTHES,
+                LocalDate.now());
+    }
+
+    void createCorrectUserAndSaveToDB(String username) throws Exception {
+        if (!isUserExist(username)){
+            User user = new User(username, "pass123", "pass123");
+            MockMvcBuilders.standaloneSetup(mainController).build()
+                    .perform(MockMvcRequestBuilderUtils
+                            .postForm("/home/register", user));
+        }
+    }
+
+    boolean isUserExist(String username){
+        return userRepository.findByEmail(username).isPresent();
+    }
+
+    @Test
+    void shouldReturnAddExpenseViewWithErrorWhenExpenseIsWithoutAmount() throws Exception {
+        Expense newExpense = createExpenseWithoutAmount();
+        createCorrectUserAndSaveToDB(username);
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/user/add-expense", newExpense)
+                        .principal(principal))
+                .andExpect(MockMvcResultMatchers.model().hasErrors())
+                .andExpect(view().name("add-expenses-page"));
     }
 
     private Expense createExpenseWithoutAmount() {
-        Expense expense = new Expense();
-        expense.setAmount("");
-        expense.setForWhat(ForWhatEnum.CLOTHES);
-        expense.setDate(LocalDate.now());
-        return expense;
+        return new Expense("",
+                ForWhatEnum.CLOTHES,
+                LocalDate.now());
+    }
+
+    @Test
+    void shouldReturnAddExpenseViewWithErrorWhenExpenseIsWithoutDate() throws Exception {
+        Expense newExpense = createExpenseWithoutDate();
+        createCorrectUserAndSaveToDB(username);
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/user/add-expense", newExpense)
+                        .principal(principal))
+                .andExpect(MockMvcResultMatchers.model().hasErrors())
+                .andExpect(view().name("add-expenses-page"));
     }
 
     private Expense createExpenseWithoutDate() {
-        Expense expense = new Expense();
-        expense.setAmount("150.80");
-        expense.setForWhat(ForWhatEnum.CLOTHES);
-        return expense;
+        return new Expense("150.80",
+                ForWhatEnum.CLOTHES,
+                null);
     }
 }

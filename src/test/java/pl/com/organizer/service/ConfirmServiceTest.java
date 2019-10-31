@@ -39,28 +39,14 @@ class ConfirmServiceTest {
     }
 
     @Test
-    void shouldThrowException() {
-        //given
-        String validConfirmationNumber = "validNumber";
-
-        //when
-        given(confirmServiceMock.getUserByConfirmationNumber(validConfirmationNumber))
-                .willThrow(UserNotFoundException.class);
-
-        //then
-        assertThrows(UserNotFoundException.class,
-                () -> confirmServiceMock.getUserByConfirmationNumber(validConfirmationNumber));
-    }
-
-    @Test
-    void shouldThrowExceptionUserNotFound() {
+    void shouldThrowExceptionWhenIncorrectConfirmationNumberIsGiven() {
         //given
         ConfirmService confirmService = new ConfirmService(userRepositoryMock);
-        String validConfirmationNumber = "validNumber";
+        String incorrectConfirmationNumber = "incorrectNumber";
 
         //then
         assertThrows(UserNotFoundException.class,
-                () -> confirmService.getUserByConfirmationNumber(validConfirmationNumber));
+                () -> confirmService.getUserByConfirmationNumber(incorrectConfirmationNumber));
     }
 
     @Test
