@@ -18,6 +18,7 @@
         <java.version>11</java.version>
         <openhtml.version>1.0.0</openhtml.version>
         <org.junit.jupiter.version>5.5.2</org.junit.jupiter.version>
+        <org.mockito.version>3.1.0</org.mockito.version>
     </properties>
 
     <dependencies>
@@ -90,7 +91,13 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>3.1.0</version>
+            <version>${org.mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${org.mockito.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
