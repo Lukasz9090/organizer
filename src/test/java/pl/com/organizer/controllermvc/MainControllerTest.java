@@ -17,8 +17,8 @@ import pl.com.organizer.repository.UserRepository;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Tag("integration_test")
@@ -50,28 +50,39 @@ class MainControllerTest {
 
     @Test
     void shouldRedirectToHomePageURL() throws Exception {
-        this.mockMvc.perform(get("/"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/home"));
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(
+                        matchAll(
+                                status().is3xxRedirection(),
+                                redirectedUrl("/home")));
     }
 
     @Test
     void shouldReturnMainViewWhenURLIsCalled() throws Exception {
-        this.mockMvc.perform(get("/home"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("main-page"));
+        this.mockMvc
+                .perform(get("/home"))
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                view().name("main-page")));
     }
 
     @Test
     void shouldReturnLoginViewWhenURLIsCalled() throws Exception {
-        this.mockMvc.perform(get("/home/login"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("login-page"));
+        this.mockMvc
+                .perform(
+                        get("/home/login"))
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                view().name("login-page")));
     }
 
     @Test
     void shouldReturnResetPasswordViewWhenURLIsCalled() throws Exception {
-        this.mockMvc.perform(get("/home/login/reset-password"))
+        this.mockMvc
+                .perform(get("/home/login/reset-password"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("reset-password-page-write-email"));
     }
@@ -79,19 +90,22 @@ class MainControllerTest {
     @Test
     void shouldReturnResetPasswordViewWhenResetPasswordNumberIsCorrect() throws Exception {
         createUserToUseInPasswordReset("testUserToResetPassword@mail.com");
-        this.mockMvc.perform(get("/home/set-new-password?id=2"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("reset-password-page-write-new-password"));
+        this.mockMvc
+                .perform(get("/home/set-new-password?id=2"))
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                view().name("reset-password-page-write-new-password")));
     }
 
     void createUserToUseInPasswordReset(String username) throws Exception {
-        if (!isUserExist(username)){
+        if (!isUserExist(username)) {
             createCorrectUserAndSaveToDB(username);
         }
-        setResetPasswordNumber(username,"2");
+        setResetPasswordNumber(username, "2");
     }
 
-    boolean isUserExist(String username){
+    boolean isUserExist(String username) {
         return userRepository.findByEmail(username).isPresent();
     }
 
@@ -130,10 +144,11 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/set-new-password?id=2", newCorrectPasswordToResetTheOldOne))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("default-success-page"))
-                .andExpect(model().attribute("message", "Password reset with success. You can sign in now."));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasNoErrors(),
+                        status().isOk(),
+                        view().name("default-success-page"),
+                        model().attribute("message", "Password reset with success. You can sign in now.")));
     }
 
     private ChangePassword createCorrectPassword() {
@@ -150,9 +165,10 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/set-new-password?id=2", incorrectPasswordToReset))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("reset-password-page-write-new-password"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        status().isOk(),
+                        view().name("reset-password-page-write-new-password")));
     }
 
     private ChangePassword createIncorrectPassword() {
@@ -169,15 +185,18 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/set-new-password?id=250", createCorrectPassword))
-                .andExpect(view().name("default-error-page"))
-                .andExpect(model().attribute("message", "Invalid confirmation number. Please contact us."));
+                .andExpect(matchAll(
+                        view().name("default-error-page"),
+                        model().attribute("message", "Invalid confirmation number. Please contact us.")));
     }
 
     @Test
     void shouldReturnRegisterViewWhenURLIsCalled() throws Exception {
-        this.mockMvc.perform(get("/home/register"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("register-page"));
+        this.mockMvc
+                .perform(get("/home/register"))
+                .andExpect(matchAll(
+                        status().isOk(),
+                        view().name("register-page")));
     }
 
     @Test
@@ -188,10 +207,11 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", correctUser))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("default-success-page"))
-                .andExpect(model().attribute("message", "Check your mailbox and confirm your account."));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasNoErrors(),
+                        status().isOk(),
+                        view().name("default-success-page"),
+                        model().attribute("message", "Check your mailbox and confirm your account.")));
 
         User userFromDB = userRepository.findByEmail(correctUser.getEmail()).get();
 
@@ -208,8 +228,9 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", correctUser))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("register-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("register-page")));
     }
 
     @Test
@@ -219,8 +240,9 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", userWithIncorrectEmail))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("register-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("register-page")));
     }
 
     @Test
@@ -232,7 +254,8 @@ class MainControllerTest {
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", userWithIncorrectPasswords))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("register-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("register-page")));
     }
 }

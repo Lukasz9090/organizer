@@ -2,7 +2,6 @@ package pl.com.organizer.controllermvc;
 
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import pl.com.organizer.repository.UserRepository;
 
 import java.security.Principal;
 
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -53,14 +53,16 @@ class UserControllerTest {
     void shouldReturnLoggedMainViewWhenURLIsCalled() throws Exception {
         createCorrectUserAndSaveToDB(username);
 
-        this.mockMvc.perform(get("/user")
-                .principal(principal))
-                .andExpect(status().isOk())
-                .andExpect(view().name("logged-main-page"));
+        this.mockMvc
+                .perform(get("/user")
+                        .principal(principal))
+                .andExpect(matchAll(
+                        status().isOk(),
+                        view().name("logged-main-page")));
     }
 
     private void createCorrectUserAndSaveToDB(String username) throws Exception {
-        if (!isUserExist(username)){
+        if (!isUserExist(username)) {
             User user = new User(username, "testPassword", "testPassword");
             MockMvcBuilders.standaloneSetup(mainController).build()
                     .perform(MockMvcRequestBuilderUtils
@@ -68,7 +70,7 @@ class UserControllerTest {
         }
     }
 
-    private boolean isUserExist(String username){
+    private boolean isUserExist(String username) {
         return userRepository.findByEmail(username).isPresent();
     }
 
@@ -76,8 +78,9 @@ class UserControllerTest {
     void shouldReturnChangePasswordViewWhenURLIsCalled() throws Exception {
         this.mockMvc
                 .perform(get("/user/change-password"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("change-password-page"));
+                .andExpect(matchAll(
+                        status().isOk(),
+                        view().name("change-password-page")));
     }
 
     @Test
@@ -89,9 +92,10 @@ class UserControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/change-password", changePassword)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("success-password-change-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasNoErrors(),
+                        status().isOk(),
+                        view().name("success-password-change-page")));
     }
 
     @Test
@@ -103,9 +107,10 @@ class UserControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/change-password", changePassword)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("change-password-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        status().isOk(),
+                        view().name("change-password-page")));
     }
 
     @Test
@@ -117,15 +122,18 @@ class UserControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/change-password", changePassword)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(status().isOk())
-                .andExpect(view().name("change-password-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        status().isOk(),
+                        view().name("change-password-page")));
     }
 
     @Test
     void shouldReturnDeleteAccountViewWhenURLIsCalled() throws Exception {
-        this.mockMvc.perform(get("/user/delete-account"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("delete-account-page"));
+        this.mockMvc
+                .perform(get("/user/delete-account"))
+                .andExpect(matchAll(
+                        status().isOk(),
+                        view().name("delete-account-page")));
     }
 }

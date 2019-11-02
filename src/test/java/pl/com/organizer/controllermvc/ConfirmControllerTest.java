@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import pl.com.organizer.model.User;
 import pl.com.organizer.repository.UserRepository;
 
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -36,19 +37,23 @@ class ConfirmControllerTest {
 
     @Test
     void shouldReturnErrorPageWhenConfirmAccountIdIsNotExist() throws Exception {
-        this.mockMvc.perform(get("/home/confirm-account?id=90"))
-                .andExpect(view().name("default-error-page"))
-                .andExpect(model().attribute("message", "Invalid confirmation number. Please contact us."));
+        this.mockMvc
+                .perform(get("/home/confirm-account?id=90"))
+                .andExpect(matchAll(
+                                view().name("default-error-page"),
+                                model().attribute("message", "Invalid confirmation number. Please contact us.")));
     }
 
     @Test
     void shouldReturnDefaultSuccessPageWhenConfirmAccountIdExist() throws Exception {
         createUserToUseForConfirmAccount();
 
-        this.mockMvc.perform(get("/home/confirm-account?id=2"))
-                .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("default-success-page"))
-                .andExpect(model().attribute("message", "Your e-mail address has been verified. You can sign in now."));
+        this.mockMvc
+                .perform(get("/home/confirm-account?id=2"))
+                .andExpect(matchAll(
+                                status().isOk(),
+                                view().name("default-success-page"),
+                                model().attribute("message", "Your e-mail address has been verified. You can sign in now.")));
 
         clearAfterTests();
     }
@@ -69,7 +74,7 @@ class ConfirmControllerTest {
         });
     }
 
-    private void clearAfterTests(){
+    private void clearAfterTests() {
         userRepository.findByEmail("testConfirmUser@mail.com").ifPresent(user -> {
             userRepository.delete(user);
         });

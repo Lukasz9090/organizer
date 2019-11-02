@@ -17,6 +17,7 @@ import pl.com.organizer.repository.UserRepository;
 import java.security.Principal;
 import java.time.LocalDate;
 
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -51,9 +52,11 @@ class ExpenseControllerTest {
 
     @Test
     void shouldReturnAddExpensesViewWhenURLIsCalled() throws Exception {
-        this.mockMvc.perform(get("/user/add-expense"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("add-expenses-page"));
+        this.mockMvc
+                .perform(get("/user/add-expense"))
+                .andExpect(matchAll(
+                        status().isOk(),
+                        view().name("add-expenses-page")));
     }
 
     @Test
@@ -64,8 +67,9 @@ class ExpenseControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/add-expense", newExpense)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(redirectedUrl("/user/add-expense"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasNoErrors(),
+                        redirectedUrl("/user/add-expense")));
     }
 
     private Expense createCorrectExpense() {
@@ -75,7 +79,7 @@ class ExpenseControllerTest {
     }
 
     private void createCorrectUserAndSaveToDB(String username) throws Exception {
-        if (!isUserExist(username)){
+        if (!isUserExist(username)) {
             User user = new User(username, "pass123", "pass123");
             MockMvcBuilders.standaloneSetup(mainController).build()
                     .perform(MockMvcRequestBuilderUtils
@@ -83,7 +87,7 @@ class ExpenseControllerTest {
         }
     }
 
-    private boolean isUserExist(String username){
+    private boolean isUserExist(String username) {
         return userRepository.findByEmail(username).isPresent();
     }
 
@@ -95,8 +99,9 @@ class ExpenseControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/add-expense", newExpense)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("add-expenses-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("add-expenses-page")));
     }
 
     private Expense createExpenseWithoutAmount() {
@@ -113,8 +118,9 @@ class ExpenseControllerTest {
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/user/add-expense", newExpense)
                         .principal(principal))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("add-expenses-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("add-expenses-page")));
     }
 
     private Expense createExpenseWithoutDate() {
