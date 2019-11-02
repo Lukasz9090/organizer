@@ -4,13 +4,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import pl.com.organizer.enums.RoleEnum;
 import pl.com.organizer.model.Role;
 import pl.com.organizer.repository.RoleRepository;
-
-import javax.validation.Validator;
-
 
 @SpringBootApplication // @Configuration, @EnableAutoConfiguration, @ComponentScan
 public class OrganizerApplication {
@@ -30,10 +26,4 @@ public class OrganizerApplication {
             }
         };
     }
-
-    @Bean
-    public Validator validator(){
-        return new LocalValidatorFactoryBean();
-    }
-
 }

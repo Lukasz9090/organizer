@@ -83,7 +83,7 @@ public class ReportGeneratorService {
         return filterList(listWithAllSpending, fromDate, toDate, forWhatEnum);
     }
 
-    private List<Expense> filterList(List<Expense> listWithAllSpending,
+    List<Expense> filterList(List<Expense> listWithAllSpending,
                                      LocalDate fromDate,
                                      LocalDate toDate,
                                      ForWhatEnum forWhatEnum) {
@@ -99,19 +99,19 @@ public class ReportGeneratorService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
     }
 
-    private boolean filterListByDate(Expense spending,
+    boolean filterListByDate(Expense expense,
                                      LocalDate fromDate,
                                      LocalDate toDate) {
-        return (spending.getDate().equals(fromDate) ||
-                spending.getDate().isAfter(fromDate) && spending.getDate().isBefore(toDate) ||
-                spending.getDate().equals(toDate));
+        return (expense.getDate().equals(fromDate) ||
+                expense.getDate().isAfter(fromDate) && expense.getDate().isBefore(toDate) ||
+                expense.getDate().equals(toDate));
     }
 
-    private boolean filterListByExpenseType(Expense expense, ForWhatEnum forWhat) {
+    boolean filterListByExpenseType(Expense expense, ForWhatEnum forWhat) {
         return forWhat == ForWhatEnum.ALL || (expense.getForWhat() == forWhat);
     }
 
-    private BigDecimal calculateSumOfAmount(List<Expense> filteredList){
+    BigDecimal calculateSumOfAmount(List<Expense> filteredList){
         BigDecimal sum = new BigDecimal("0");
             for (Expense expense : filteredList){
                 sum = sum.add(new BigDecimal(expense.getAmount()));
@@ -119,14 +119,14 @@ public class ReportGeneratorService {
             return sum;
     }
 
-    private LocalDate getFirstDate(List<Expense> listWithFilteredData) {
+    LocalDate getFirstDate(List<Expense> listWithFilteredData) {
         if (listWithFilteredData.isEmpty()) {
             throw new IncorrectDateException("You have selected the wrong dates");
         }
         return listWithFilteredData.get(0).getDate();
     }
 
-    private LocalDate getLastDate(List<Expense> listWithFilteredData) {
+    LocalDate getLastDate(List<Expense> listWithFilteredData) {
         if (listWithFilteredData.isEmpty()) {
             throw new IncorrectDateException("You have selected the wrong dates");
         }

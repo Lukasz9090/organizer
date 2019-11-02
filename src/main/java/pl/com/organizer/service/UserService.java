@@ -23,7 +23,7 @@ public class UserService {
         return passwordEncoder.matches(oldPasswordToCheck, oldPasswordInDb);
     }
 
-    public User getUserByUsername(String email) {
+    User getUserByUsername(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found."));
     }

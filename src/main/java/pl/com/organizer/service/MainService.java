@@ -5,12 +5,10 @@ import org.springframework.stereotype.Service;
 import pl.com.organizer.enums.RoleEnum;
 import pl.com.organizer.exception.UserExistException;
 import pl.com.organizer.exception.UserNotFoundException;
-import pl.com.organizer.model.Role;
 import pl.com.organizer.model.User;
 import pl.com.organizer.repository.RoleRepository;
 import pl.com.organizer.repository.UserRepository;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -43,7 +41,7 @@ public class MainService {
         userRepository.save(userToResetPassword);
     }
 
-    private User getUserByUsername(String email) {
+    User getUserByUsername(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found."));
     }
@@ -54,13 +52,11 @@ public class MainService {
     }
 
     public void createNewUser(User user) {
-        Optional<User> usernameExist = userRepository.findByEmail(user.getEmail());
-        if (usernameExist.isPresent()) {
+        if (checkIfUserExist(user.getEmail())) {
             throw new UserExistException("User with email: " + user.getEmail() + " already exist");
         }
 
-        Role userRole = roleRepository.findByRole(RoleEnum.ROLE_USER);
-        user.setRole(Set.of(userRole));
+        setRoleForUser(user, RoleEnum.ROLE_USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmationNumber(user.confirmationNumberGenerator());
 
@@ -70,5 +66,15 @@ public class MainService {
                 "Budget organizer - account confirmation link",
                 "email-message-confirm-account-template",
                 "http://localhost:8080/home/confirm-account?id=" + user.getConfirmationNumber());
+    }
+
+    boolean checkIfUserExist(String username){
+        return userRepository.findByEmail(username).isPresent();
+    }
+
+    void setRoleForUser (User user, RoleEnum role){
+        user.setRole(Set
+                .of(roleRepository
+                        .findByRole(role)));
     }
 }

@@ -8,10 +8,6 @@ import java.util.regex.Pattern;
 public class CorrectAmountValidator implements ConstraintValidator<CorrectAmount, String> {
 
     @Override
-    public void initialize(CorrectAmount constraintAnnotation) {
-    }
-
-    @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         Pattern firstValidValueOfAmount = Pattern.compile("-?[0-9]{1,6}\\.[0-9]{0,2}");
         Pattern secondValidValueOfAmount = Pattern.compile("-?[0-9]{1,6}");

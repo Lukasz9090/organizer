@@ -37,7 +37,7 @@ public class ReportGeneratorController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.add("content-disposition", "inline; filename=" + "Expenses report.pdf");
-        return new ResponseEntity<>(pdfContents, headers, HttpStatus.OK);
+        return new ResponseEntity<>(pdfContents, headers, HttpStatus.CREATED);
     }
 
     @ExceptionHandler(IncorrectDateException.class)

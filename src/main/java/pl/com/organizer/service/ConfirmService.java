@@ -16,14 +16,17 @@ public class ConfirmService {
 
     public void confirmEmailAddress (String confirmationNumber){
         User userToConfirmEmail = getUserByConfirmationNumber(confirmationNumber);
-
-        userToConfirmEmail.setEmailAddressConfirmationStatus(true);
-        userToConfirmEmail.setConfirmationNumber("Account confirmed");
-        userRepository.save(userToConfirmEmail);
+        userRepository.save(confirmAccount(userToConfirmEmail));
     }
 
-    private User getUserByConfirmationNumber (String confirmationNumber){
+    User getUserByConfirmationNumber (String confirmationNumber){
         return userRepository.findByConfirmationNumber(confirmationNumber)
                 .orElseThrow(() ->  new UserNotFoundException("Invalid confirmation number. Please contact us."));
+    }
+
+    User confirmAccount (User user){
+        user.setActive(true);
+        user.setConfirmationNumber("Account confirmed");
+        return user;
     }
 }

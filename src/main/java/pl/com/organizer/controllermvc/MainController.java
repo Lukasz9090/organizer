@@ -43,7 +43,7 @@ public class MainController {
     @GetMapping("/home/login/reset-password")
     public String resetAccountPasswordWriteEmail() {
         return "reset-password-page-write-email";
-    }//TODO - add model to create test for post method
+    }
 
     @PostMapping("/home/login/new-password")
     public String resetAccountPasswordWriteEmail(@RequestParam String emailAddress,

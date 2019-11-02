@@ -40,13 +40,21 @@ public class User {
 
     private List<Expense> expenses = new ArrayList<>();
 
-    private boolean emailAddressConfirmationStatus;
+    private boolean isActive;
 
     private String confirmationNumber;
 
     private String resetPasswordNumber;
 
     public User() {
+    }
+
+    public User(String email,
+                String password,
+                String confirmPassword) {
+        this.email = email;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
     }
 
     public String getId() {
@@ -97,12 +105,12 @@ public class User {
         this.expenses = expenses;
     }
 
-    public boolean isEmailAddressConfirmationStatus() {
-        return emailAddressConfirmationStatus;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setEmailAddressConfirmationStatus(boolean emailAddressConfirmationStatus) {
-        this.emailAddressConfirmationStatus = emailAddressConfirmationStatus;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public String getConfirmationNumber() {

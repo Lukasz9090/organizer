@@ -1,8 +1,7 @@
 package pl.com.organizer.controllermvc;
 
 import io.florianlopes.spring.test.web.servlet.request.MockMvcRequestBuilderUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,14 +14,16 @@ import pl.com.organizer.model.User;
 import pl.com.organizer.repository.RoleRepository;
 import pl.com.organizer.repository.UserRepository;
 
-import java.util.Optional;
-
+import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Tag("integration_test")
 @SpringBootTest
-public class MainControllerTest {
+class MainControllerTest {
 
     private MockMvc mockMvc;
 
@@ -36,7 +37,7 @@ public class MainControllerTest {
     private RoleRepository roleRepository;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(mainController).build();
 
         Role userRole = roleRepository.findByRole(RoleEnum.ROLE_USER);
@@ -48,80 +49,109 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testMainPageRedirect() throws Exception {
-        this.mockMvc.perform(get("/"))
-                .andExpect(status().is3xxRedirection())//.andDo(print())
-                .andExpect(redirectedUrl("/home"));
+    void shouldRedirectToHomePageURL() throws Exception {
+        this.mockMvc
+                .perform(get("/"))
+                .andExpect(
+                        matchAll(
+                                status().is3xxRedirection(),
+                                redirectedUrl("/home")));
     }
 
     @Test
-    public void testMainPage() throws Exception {
-        this.mockMvc.perform(get("/home"))
-                .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("main-page"));
+    void shouldReturnMainViewWhenURLIsCalled() throws Exception {
+        this.mockMvc
+                .perform(get("/home"))
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                view().name("main-page")));
     }
 
     @Test
-    public void testLoginPage() throws Exception {
-        this.mockMvc.perform(get("/home/login"))
-                .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("login-page"));
+    void shouldReturnLoginViewWhenURLIsCalled() throws Exception {
+        this.mockMvc
+                .perform(
+                        get("/home/login"))
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                view().name("login-page")));
     }
 
     @Test
-    public void testResetAccountPasswordWriteEmail() throws Exception {
-        this.mockMvc.perform(get("/home/login/reset-password"))
-                .andExpect(status().isOk())//.andDo(print())
+    void shouldReturnResetPasswordViewWhenURLIsCalled() throws Exception {
+        this.mockMvc
+                .perform(get("/home/login/reset-password"))
+                .andExpect(status().isOk())
                 .andExpect(view().name("reset-password-page-write-email"));
     }
 
-    //TODO - post method to resetAccountPasswordWriteEmail
+    @Test
+    void shouldReturnResetPasswordViewWhenResetPasswordNumberIsCorrect() throws Exception {
+        createUserToUseInPasswordReset("testUserToResetPassword@mail.com");
+        this.mockMvc
+                .perform(get("/home/set-new-password?id=2"))
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                view().name("reset-password-page-write-new-password")));
+    }
 
-    public void createUserToUseInPasswordResetFeature() throws Exception {
-        Optional<User> userToUserInPasswordResetFeature = userRepository.findByEmail("testResetPassword@mail.com");
-
-        if (userToUserInPasswordResetFeature.isEmpty()){
-            User newUserToUserInPasswordResetFeature = new User();
-            newUserToUserInPasswordResetFeature.setEmail("testResetPassword@mail.com");
-            newUserToUserInPasswordResetFeature.setPassword("testPassword");
-            newUserToUserInPasswordResetFeature.setConfirmPassword("testPassword");
-
-            this.mockMvc
-                    .perform(MockMvcRequestBuilderUtils
-                            .postForm("/home/register", newUserToUserInPasswordResetFeature));
+    void createUserToUseInPasswordReset(String username) throws Exception {
+        if (!isUserExist(username)) {
+            createCorrectUserAndSaveToDB(username);
         }
+        setResetPasswordNumber(username, "2");
+    }
 
-        Optional<User> userToResetPassword = userRepository.findByEmail("testResetPassword@mail.com");
+    boolean isUserExist(String username) {
+        return userRepository.findByEmail(username).isPresent();
+    }
 
-        if(userToResetPassword.isPresent()){
-            userToResetPassword.get().setResetPasswordNumber("2");
-            userRepository.save(userToResetPassword.get());
-        }
+    User createCorrectUserAndSaveToDB(String username) throws Exception {
+        User user = createUser(username);
+        this.mockMvc
+                .perform(MockMvcRequestBuilderUtils
+                        .postForm("/home/register", user));
+        return user;
+    }
+
+    private User createUser(String username) {
+        return new User(username,
+                "testPassword",
+                "testPassword");
+    }
+
+    void ifUserExistDeleteIt(String username) {
+        userRepository.findByEmail(username)
+                .ifPresent(user -> userRepository.delete(user));
+    }
+
+    void setResetPasswordNumber(String username, String passwordNumber) throws Exception {
+        userRepository.findByEmail(username)
+                .ifPresent(user -> {
+                    user.setResetPasswordNumber(passwordNumber);
+                    userRepository.save(user);
+                });
     }
 
     @Test
-    public void testResetAccountPasswordSetNewPassword() throws Exception {
-        createUserToUseInPasswordResetFeature();
-        this.mockMvc.perform(get("/home/set-new-password?id=2"))
-                .andExpect(status().isOk()).andDo(print())
-                .andExpect(view().name("reset-password-page-write-new-password"));
-    }
-
-    @Test
-    public void testResetAccountPasswordSetNewPasswordSuccess() throws Exception {
-        createUserToUseInPasswordResetFeature();
+    void shouldReturnDefaultSuccessViewWithMessageWhenPasswordToResetOldPasswordIsCorrect() throws Exception {
+        createUserToUseInPasswordReset("testUserToResetPassword@mail.com");
         ChangePassword newCorrectPasswordToResetTheOldOne = createCorrectPassword();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/set-new-password?id=2", newCorrectPasswordToResetTheOldOne))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("default-success-page"))
-                .andExpect(model().attribute("message", "Password reset with success. You can sign in now."));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasNoErrors(),
+                        status().isOk(),
+                        view().name("default-success-page"),
+                        model().attribute("message", "Password reset with success. You can sign in now.")));
     }
 
-    public ChangePassword createCorrectPassword() {
+    private ChangePassword createCorrectPassword() {
         ChangePassword changePassword = new ChangePassword();
         changePassword.setNewPassword("testPassword50");
         changePassword.setConfirmNewPassword("testPassword50");
@@ -129,18 +159,19 @@ public class MainControllerTest {
     }
 
     @Test
-    public void resetAccountPasswordSetNewPasswordWithError() throws Exception {
+    void shouldReturnResetPasswordViewWithErrorMessageWhenPasswordToResetOldPasswordIsNotCorrect() throws Exception {
         ChangePassword incorrectPasswordToReset = createIncorrectPassword();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/set-new-password?id=2", incorrectPasswordToReset))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("reset-password-page-write-new-password"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        status().isOk(),
+                        view().name("reset-password-page-write-new-password")));
     }
 
-    public ChangePassword createIncorrectPassword() {
+    private ChangePassword createIncorrectPassword() {
         ChangePassword changePassword = new ChangePassword();
         changePassword.setNewPassword("testPassword0");
         changePassword.setConfirmNewPassword("testPassword50");
@@ -148,91 +179,83 @@ public class MainControllerTest {
     }
 
     @Test
-    public void resetAccountPasswordWrongConfirmationNumberToCreatePassword() throws Exception {
+    void shouldReturnDefaultErrorViewWithErrorMessageWhenResetPasswordNumberIsNotCorrect() throws Exception {
         ChangePassword createCorrectPassword = createCorrectPassword();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/set-new-password?id=250", createCorrectPassword))
-                .andExpect(view().name("default-error-page"))
-        .andExpect(model().attribute("message", "Invalid confirmation number. Please contact us."));
+                .andExpect(matchAll(
+                        view().name("default-error-page"),
+                        model().attribute("message", "Invalid confirmation number. Please contact us.")));
     }
 
     @Test
-    public void testRegisterNewUser() throws Exception {
-        this.mockMvc.perform(get("/home/register"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("register-page"));
+    void shouldReturnRegisterViewWhenURLIsCalled() throws Exception {
+        this.mockMvc
+                .perform(get("/home/register"))
+                .andExpect(matchAll(
+                        status().isOk(),
+                        view().name("register-page")));
     }
 
     @Test
-    public void testRegisterNewUserSuccess() throws Exception {
-        userRepository.findByEmail("test@mail.com").ifPresent(user -> userRepository.delete(user));
-        User correctUser = createCorrectUser();
+    void shouldReturnDefaultSuccessViewWhenUserIsSuccessfullyCreated() throws Exception {
+        ifUserExistDeleteIt("testUserToRegister@mail.com");
+        User correctUser = createUser("testUserToRegister@mail.com");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", correctUser))
-                .andExpect(MockMvcResultMatchers.model().hasNoErrors())
-                .andExpect(status().isOk())//.andDo(print())
-                .andExpect(view().name("default-success-page"))
-        .andExpect(model().attribute("message", "Check your mailbox and confirm your account."));
-    }
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasNoErrors(),
+                        status().isOk(),
+                        view().name("default-success-page"),
+                        model().attribute("message", "Check your mailbox and confirm your account.")));
 
-    public User createCorrectUser() {
-        User correctUser = new User();
-        correctUser.setEmail("test@mail.com");
-        correctUser.setPassword("testPassword");
-        correctUser.setConfirmPassword("testPassword");
-        return correctUser;
+        User userFromDB = userRepository.findByEmail(correctUser.getEmail()).get();
+
+        assertAll("Check if user is in DB.",
+                () -> assertThat(userFromDB.getEmail(), is(equalTo(correctUser.getEmail()))),
+                () -> assertThat(userFromDB.getPassword(), is(not(equalTo(correctUser.getPassword()))))
+        );
     }
 
     @Test
-    public void testAddUserWithErrorWhereSecondTimeIsEnteredTheSameEmail() throws Exception {
-        User correctUser = createCorrectUser();
+    void shouldReturnRegisterViewWithErrorMessageWhenUsernameAlreadyExistInDB() throws Exception {
+        User correctUser = createCorrectUserAndSaveToDB("testUserToRegisterTwoTimes@mail.com");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", correctUser))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("register-page"));
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("register-page")));
     }
 
     @Test
-    public void testRegisterNewUserWithErrorWhereEmailIsIncorrect() throws Exception {
-        User userWithIncorrectEmail = createUserWhereEmailIsIncorrect();
+    void shouldReturnRegisterViewWithErrorWhenEmailAddressIsNotCorrect() throws Exception {
+        User userWithIncorrectEmail = createUser("testUserWithIncorrectEmail2mail.com");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", userWithIncorrectEmail))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("register-page"));
-    }
-
-    public User createUserWhereEmailIsIncorrect() {
-        User correctUser = new User();
-        correctUser.setEmail("test2mail.com");
-        correctUser.setPassword("testPassword");
-        correctUser.setConfirmPassword("testPassword");
-        return correctUser;
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("register-page")));
     }
 
     @Test
-    public void testAddUserWithErrorWherePasswordAndConfirmPasswordAreNotMatch() throws Exception {
-        User userWithIncorrectPasswords = createUserWherePasswordAndConfirmPasswordAreNotMatch();
+    void shouldReturnRegisterPageWithErrorWhenPasswordsAreIncorrect() throws Exception {
+        User userWithIncorrectPasswords = createUser("testUserWithIncorrectPasswords");
+        userWithIncorrectPasswords.setPassword("testPassword");
+        userWithIncorrectPasswords.setPassword("notMatchesPassword");
 
         this.mockMvc
                 .perform(MockMvcRequestBuilderUtils
                         .postForm("/home/register", userWithIncorrectPasswords))
-                .andExpect(MockMvcResultMatchers.model().hasErrors())
-                .andExpect(view().name("register-page"));
-    }
-
-    public User createUserWherePasswordAndConfirmPasswordAreNotMatch() {
-        User incorrectUser = new User();
-        incorrectUser.setEmail("testTwo@mail.com");
-        incorrectUser.setPassword("testPassword");
-        incorrectUser.setConfirmPassword("noTestPassword");
-        return incorrectUser;
+                .andExpect(matchAll(
+                        MockMvcResultMatchers.model().hasErrors(),
+                        view().name("register-page")));
     }
 }
