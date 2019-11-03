@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget organizer</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">HELLO [(${username})]</p>
+<form th:action="@{/user/add-expense}" method="get">
+    <input type="submit" value="Add new expense" >
+</form>
+<form th:action="@{/user/report}" method="get">
+    <input type="submit" value="Create report" >
+</form>
+<form th:action="@{/user/change-password}" method="get">
+    <input type="submit" value="Change password" >
+</form>
+<form th:action="@{/user/delete-account}" method="get">
+    <input type="submit" value="Delete account" >
+</form>
+<form th:action="@{/home}" method="get">
+    <input type="submit" value="Sign out" >
+</form>
+</body>
+</html>

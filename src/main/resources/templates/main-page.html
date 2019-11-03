@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget organizer</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+</head>
+<body>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">WELCOME IN BUDGET ORGANIZER</p>
+<form th:action="@{/home/register}" method="get">
+    <input type="submit" value="Create account">
+</form>
+<form th:action="@{/home/login}" method="get">
+    <input type="submit" value="Sign in">
+</form>
+</body>
+</html>
+
