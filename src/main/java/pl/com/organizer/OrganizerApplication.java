@@ -8,7 +8,7 @@ import pl.com.organizer.enums.RoleEnum;
 import pl.com.organizer.model.Role;
 import pl.com.organizer.repository.RoleRepository;
 
-@SpringBootApplication // @Configuration, @EnableAutoConfiguration, @ComponentScan
+@SpringBootApplication 
 public class OrganizerApplication {
 
     public static void main(String[] args) {
