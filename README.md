@@ -16,7 +16,7 @@
 * Generate expenses report - pdf file
 
 ## Screenshots
-screenshots/main_page.png
+![Main_page](screenshots/main_page.png)
 
 ## Status
 Project is finished.
