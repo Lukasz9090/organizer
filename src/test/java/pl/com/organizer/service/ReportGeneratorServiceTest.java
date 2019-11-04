@@ -52,7 +52,7 @@ class ReportGeneratorServiceTest {
         List<Expense> filteredSortedList = reportGeneratorService.filterList(expenseList,
                 LocalDate.of(2019,1,3),
                 LocalDate.of(2019,1,4),
-                ForWhatEnum.TRAVEL);
+                ForWhatEnum.TRAVELING);
 
         //then
         assertAll(
@@ -229,7 +229,7 @@ class ReportGeneratorServiceTest {
                 new Expense("123.12", ForWhatEnum.CLOTHES, LocalDate.of(2019, 1, 3)),
                 new Expense("220.00", ForWhatEnum.CAR_FUEL, LocalDate.of(2019, 1, 2)),
                 new Expense("150.20", ForWhatEnum.COSMETICS, LocalDate.of(2019, 1, 1)),
-                new Expense("350.20", ForWhatEnum.TRAVEL, LocalDate.of(2019, 1, 4)),
+                new Expense("350.20", ForWhatEnum.TRAVELING, LocalDate.of(2019, 1, 4)),
                 new Expense("450.00", ForWhatEnum.FLAT_BILLS, LocalDate.of(2019, 1, 5)),
                 new Expense("205.00", ForWhatEnum.CAR_OTHER, LocalDate.of(2019, 1, 6))
         );
