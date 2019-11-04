@@ -15,5 +15,8 @@
 * Add expences (amount, type, date)
 * Generate expenses report - pdf file
 
+## Screenshots
+screenshots/main_page.png
+
 ## Status
 Project is finished.
