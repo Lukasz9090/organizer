@@ -6,7 +6,7 @@ public enum ForWhatEnum {
     COSMETICS("cosmetics"),
     FLAT_BILLS("flat-bills"), FLAT_OTHER("flat-other"),
     CAR_FUEL("car-fuel"), CAR_OTHER("car-other"),
-    RECREATION("recreation"), TRAVEL("travel"),
+    RECREATION("recreation"), TRAVELING("traveling"),
     ALL("all");
 
     String description;
