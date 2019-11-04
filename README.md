@@ -17,6 +17,9 @@
 
 ## Screenshots
 ![Main_page](screenshots/main_page.png)
+![Logged_page](screenshots/logged_page.png)
+![email_message](screenshots/email_message.png)
+![Report](screenshots/report.png)
 
 ## Status
 Project is finished.
