@@ -11,8 +11,13 @@
 <p class="help-message">Add new expense to your account. Enter amount, select type of expense and date.</p>
 <form action="#" th:action="@{/user/add-expense}" th:object="${expense}" method="post">
     <p class="error-message" th:errors="*{amount}"></p>
-    <input th:field="*{amount}"  type="text" placeholder="amount"/><br/>
-    <select th:field="*{forWhat}">
+    <label for="amount">Amount:</label>
+    <input id="amount" th:field="*{amount}" type="text" placeholder="Please enter the amount"/>
+    <p class="error-message" th:errors="*{date}"></p>
+    <label for="date">Date:</label>
+    <input id="date" th:field="*{date}" type="date" />
+    <label for="forWhat">Type of expense:</label>
+    <select id="forWhat" th:field="*{forWhat}">
         <option th:value="FOOD" th:text="food"></option>
         <option th:value="CLOTHES" th:text="clothes"></option>
         <option th:value="COSMETICS" th:text="cosmetics"></option>
@@ -22,10 +27,8 @@
         <option th:value="CAR_OTHER" th:text="car-other"></option>
         <option th:value="RECREATION" th:text="recreation"></option>
         <option th:value="TRAVELING" th:text="traveling"></option>
-    </select><br>
-    <p class="error-message" th:errors="*{date}"></p>
-    <input th:field="*{date}" type="date" /><br/>
-    <input type="submit" value="Add">
+    </select>
+    <input type="submit" value="Add expense">
 </form>
 <form th:action="@{/user}"  method="get">
     <input type="submit" value="Back to your page">

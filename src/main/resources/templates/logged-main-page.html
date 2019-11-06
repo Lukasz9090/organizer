@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Budget organizer</title>
-    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
 </head>
 <body>
 <header>BUDGET ORGANIZER</header>
-<p class="message-header">HELLO [(${username})]</p>
-<form th:action="@{/user/add-expense}" method="get">
-    <input type="submit" value="Add new expense" >
-</form>
-<form th:action="@{/user/report}" method="get">
-    <input type="submit" value="Create report" >
-</form>
-<form th:action="@{/user/change-password}" method="get">
-    <input type="submit" value="Change password" >
-</form>
-<form th:action="@{/user/delete-account}" method="get">
-    <input type="submit" value="Delete account" >
-</form>
-<form th:action="@{/home}" method="get">
-    <input type="submit" value="Sign out" >
-</form>
+<p class="message-header-lp">HELLO [(${username})]</p>
+<div class="button-flex">
+    <form th:action="@{/user/add-expense}" method="get">
+        <input type="submit" value="Add new expense">
+    </form>
+    <form th:action="@{/user/settings}" method="get">
+        <input type="submit" value="Settings">
+    </form>
+</div>
+<div class="button-flex">
+    <form th:action="@{/user/report}" method="get">
+        <input type="submit" value="Create report">
+    </form>
+    <form th:action="@{/home}" method="get">
+        <input type="submit" value="Sign out">
+    </form>
+</div>
 </body>
 </html>

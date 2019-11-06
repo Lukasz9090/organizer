@@ -9,12 +9,13 @@
 <header>BUDGET ORGANIZER</header>
 <p class="message-header">DELETE ACCOUNT</p>
 <p class="help-message">Enter your current password to delete account.</p>
-<form th:action="@{/user/delete-account}" th:method="delete">
-    <p class="error-message" th:if="${errorMessage != null}">Incorrect password</p>
-    <input type="password" name="passwordToCheck" placeholder="password"/><br/>
+<form th:action="@{/user/settings/delete-account}" th:method="delete">
+    <p class="error-message" th:if="${errorMessage != null}">[(${errorMessage})]</p>
+    <label for="oldPassword">Password:</label>
+    <input id="oldPassword" type="password" name="passwordToCheck" placeholder="Please enter your password"/>
     <input type="submit" value="Confirm deletion" >
 </form>
-<form th:action="@{/user}"  method="get">
+<form th:action="@{/user/settings}"  method="get">
     <input type="submit" value="Back">
 </form>
 </body>
