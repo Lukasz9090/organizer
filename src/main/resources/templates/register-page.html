@@ -10,11 +10,14 @@
 <p class="message-header">CREATE ACCOUNT</p>
 <form th:action="@{/home/register}" th:object="${user}"  method="post">
     <p class="error-message" th:errors="*{email}"></p>
-    <input th:field="*{email}" type="email" placeholder="e-mail"/><br/>
+    <label for="login">Login:</label>
+    <input id="login" th:field="*{email}" type="email" placeholder="Please enter your e-mail address as login"/>
     <p class="error-message" th:errors="*{password}"></p>
-    <input th:field="*{password}" type="password" placeholder="password"/><br/>
+    <label for="password">Set password:</label>
+    <input id="password" th:field="*{password}" type="password" placeholder="Please set password"/>
     <p class="error-message" th:errors="*{confirmPassword}"></p>
-    <input th:field="*{confirmPassword}" type="password" placeholder="confirm password"/><br/>
+    <label for="confirmPassword">Set password:</label>
+    <input id="confirmPassword" th:field="*{confirmPassword}" type="password" placeholder="Please confirm password"/>
     <input type="submit" value="Register">
 </form>
 <form th:action="@{/home}"  method="get">

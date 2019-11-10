@@ -53,7 +53,7 @@ public class MainController {
             model.addAttribute("message", "Check your mailbox to continue reset password process.");
             return "default-success-page";
         } catch (UserNotFoundException e) {
-            model.addAttribute("errorMessage", "Account with this email does not exist.");
+            model.addAttribute("errorMessage", "Account with this email address does not exist.");
             return "reset-password-page-write-email";
         }
     }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget organizer</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">SET YOUR MONTHLY INCOME</p>
+<p class="help-message">You can set your income as fixed each month or choose a different income for each month.</p>
+    <form th:action="@{/user/settings/set-income}" method="post">
+        <label for="income">Income:</label>
+        <input id="income" type="text" name="monthlyIncome" placeholder="Please enter your monthly income">
+        <label for="date">Month:</label>
+        <input id="date" type="month">
+        <input type="submit" value="Save">
+    </form>
+<form th:action="@{/user/settings}" method="get">
+    <input type="submit" value="Back">
+</form>
+</body>
+</html>

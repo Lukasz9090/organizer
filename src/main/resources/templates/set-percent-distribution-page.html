@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget organizer</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">DIVIDE THE INCOME INTO TYPE OF EXPENSES</p>
+<p class="help-message">You should plan and divide your income<br> (in %) according to the type of expenses. You can also set how much income you want to save (in %).</p>
+<form th:action="@{/user/settings/set-percent-distribution}" method="post">
+    <div class="small-label-input">
+        <label class="small" for="bill">Bill:</label>
+        <input class="small" id="bill" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="house">House:</label>
+        <input class="small" id="house" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="food">Food:</label>
+        <input class="small" id="food" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="car">Car:</label>
+        <input class="small" id="car" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="c/c">Clothes / cosmetics:</label>
+        <input class="small" id="c/c" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="t/r">Traveling / recreation:</label>
+        <input class="small" id="t/r" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="other">Other:</label>
+        <input class="small" id="other" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <div class="small-label-input">
+        <label class="small" for="save">To save:</label>
+        <input class="small" id="save" type="text" name="constantIncome" placeholder="%">
+    </div>
+    <input type="submit" value="Save settings">
+</form>
+<form th:action="@{/user/settings}" method="get">
+    <input type="submit" value="Back">
+</form>
+</body>
+</html>

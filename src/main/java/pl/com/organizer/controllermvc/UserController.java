@@ -26,14 +26,29 @@ public class UserController {
         return "logged-main-page";
     }
 
-    @GetMapping("/user/change-password")
+    @GetMapping("/user/settings")
+    public String showSettings(){
+        return "settings-page";
+    }
+
+    @GetMapping("/user/settings/set-income")
+    public String setIncome(){
+        return "set-income-page";
+    }
+
+    @GetMapping("/user/settings/set-percentage-distribution")
+    public String setPercentageDistributionOfExpenses(){
+        return "set-percent-distribution-page";
+    }
+
+    @GetMapping("/user/settings/change-password")
     public String changeAccountPassword(Model model) {
         ChangePassword changePassword = new ChangePassword();
         model.addAttribute(changePassword);
         return "change-password-page";
     }
 
-    @PostMapping("/user/change-password")
+    @PostMapping("/user/settings/change-password")
     public String changeAccountPassword(@Valid @ModelAttribute ChangePassword changePassword,
                          BindingResult result,
                          Principal principal) {
@@ -50,12 +65,12 @@ public class UserController {
         return "success-password-change-page";
     }
 
-    @GetMapping("/user/delete-account")
+    @GetMapping("/user/settings/delete-account")
     public String deleteAccount() {
         return "delete-account-page";
     }
 
-    @DeleteMapping("/user/delete-account")
+    @DeleteMapping("/user/settings/delete-account")
     public String confirmDeleteAccount(@RequestParam String passwordToCheck,
                                        Model model,
                                        Principal principal) {
@@ -63,7 +78,7 @@ public class UserController {
         boolean passwordMatchingCheck = userService.passwordChecking(username, passwordToCheck);
 
         if (!passwordMatchingCheck) {
-            model.addAttribute("errorMessage", "");
+            model.addAttribute("errorMessage", "Incorrect password");
             return "delete-account-page";
         }
         userService.deleteUser(username);

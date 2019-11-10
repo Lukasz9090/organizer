@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget organizer</title>
+    <link href="../static/css/styles.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>BUDGET ORGANIZER</header>
+<p class="message-header">SETTINGS</p>
+<form th:action="@{/user/settings/set-income}" method="get">
+    <input type="submit" value="Set your monthly income">
+</form>
+<form th:action="@{/user/settings/set-percent-distribution}" method="get">
+    <input class="small-text" type="submit" value="Set a percent distribution of expenses">
+</form>
+<form th:action="@{/user/settings/change-password}" method="get">
+    <input type="submit" value="Change password">
+</form>
+<form th:action="@{/user/settings/delete-account}" method="get">
+    <input type="submit" value="Delete account">
+</form>
+<form th:action="@{/home}" method="get">
+    <input type="submit" value="Back">
+</form>
+</body>
+</html>
